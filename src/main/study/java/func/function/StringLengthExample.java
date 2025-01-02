@@ -8,6 +8,7 @@ public class StringLengthExample {
 	
 	public static void main(String[] args) {
 		Function<String, Integer> stringLength = s -> s.length();
+		// 매개변수타입: String, 반환타입: Integer
 		
 		String str = "Function of String Length";
 		

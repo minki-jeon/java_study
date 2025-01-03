@@ -25,12 +25,29 @@ public class TshirtPredicateApp {
 		System.out.println("price filter = " + priceFilter);
 		System.out.println("color filter = " + colorFilter);
         System.out.println("colorPrice filter = " + colorPriceFilter);
+        
+        // set price&color
+        int price = 100;
+        String color = "blue";
+		List<Tshirt> inputFilter = filter2(myShirtList, new TshirtInputPredicate(), price, color);
+		System.out.println("input filter = " + inputFilter);
+        
 	}
 	
 	private static List<Tshirt> filter(List<Tshirt> myShirtList, TshirtPredicate predicate) {
 		List<Tshirt> list = new ArrayList<>();
 		for (Tshirt tshirt : myShirtList) {
 			if (predicate.test(tshirt)) {
+				list.add(tshirt);
+			}
+		}
+		return list;
+	}
+	
+	private static List<Tshirt> filter2(List<Tshirt> myShirtList, TshirtPredicate2<Tshirt> predicate, int price, String color) {
+		List<Tshirt> list = new ArrayList<>();
+		for (Tshirt tshirt : myShirtList) {
+			if (predicate.test(tshirt, price, color)) {
 				list.add(tshirt);
 			}
 		}

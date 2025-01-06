@@ -4,6 +4,7 @@ import java.util.Objects;
 
 @FunctionalInterface
 public interface Predicate<T> {
+	//* https://yeonyeon.tistory.com/200
     // 주어진 arguments를 검증
     boolean test(T t);
 

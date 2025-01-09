@@ -12,10 +12,18 @@ public class AlgorithmsDemo {
 
 		// 링크드 리스트를 만들고 초기화한다.
 		LinkedList<Integer> ll = new LinkedList<Integer>();
-		ll.add(new Integer(-8));
-		ll.add(new Integer(20));
-		ll.add(new Integer(-20));
-		ll.add(new Integer(8));
+//		ll.add(new Integer(-8));
+//		ll.add(new Integer(20));
+//		ll.add(new Integer(-20));
+//		ll.add(new Integer(8));
+		/**
+		 * Warnning : "The constructor 'Integer(int)' has been deprecated since version 9 and marked for removal"
+		 * ref : https://docs.oracle.com/javase/9/docs/api/java/lang/Integer.html
+		 */
+		ll.add(Integer.valueOf(-8));
+		ll.add(Integer.valueOf(20));
+		ll.add(Integer.valueOf(-20));
+		ll.add(Integer.valueOf(8));
 
 		// 역순의 비교자를 생성.
 		Comparator<Integer> r = Collections.reverseOrder();

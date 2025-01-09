@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 public class AlgorithmsDemo {
-	//* https://github.com/haru-note/tech-interview/blob/main/src/main/java/net/harunote/collection//AlgorithmsDemo.java
+	//* https://github.com/haru-note/tech-interview/blob/main/src/main/java/net/harunote/collection/AlgorithmsDemo.java
 
 	public static void main(String[] args) {
 

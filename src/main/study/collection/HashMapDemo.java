@@ -43,6 +43,12 @@ public class HashMapDemo {
 		hm.put("존 도", Double.valueOf(bonus + 1000));
 		System.out.println("존 도's new deposit: " + hm.get("존 도"));
 		
+		//* Test - Map.Entry
+		for (Map.Entry<String, Double> entry : hm.entrySet()) {
+		    System.out.print("key : " + entry.getKey());
+		    System.out.println(", value : " + entry.getValue());
+		}
+		
 	}
 
 }

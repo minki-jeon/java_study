@@ -32,6 +32,8 @@ public class TestFunctionJava8 {
 	 * 		3. Function: 각 인원들의 일치한 숫자의 개수를 반환
 	 * 		4. Consumer: 일치한 숫자의 개수가 가장 많은 인원의 이름을 출력
 	 * TODO
+	 * 		당첨번호를 제공받은 인원들의 숫자들을 각각 비교하여 일치되는 숫자의 개수 반환
+	 * 		가장 많은 숫자가 일치한 인원들의 이름을 반환, 출력
 	 * 		예외처리 (Null 등)
 	 */
 	
@@ -60,6 +62,9 @@ public class TestFunctionJava8 {
         for (PersonLotto person : personLottoList) {
             System.out.println(person.getName() + ": " + Arrays.toString(person.getNumbers()));
         }
+        
+        int[] winNums = randNumsSup.get();
+        System.out.println("당첨번호: " + Arrays.toString(winNums));
 		
 	}
 	

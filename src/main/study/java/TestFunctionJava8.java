@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 public class TestFunctionJava8 {
 	/**
@@ -53,10 +52,10 @@ public class TestFunctionJava8 {
 		/** 숫자들을 제공받은 사람들 **/
 		List<PersonLotto> personLottoList = new ArrayList<PersonLotto>();
 		
-		AtomicInteger seq = new AtomicInteger(0);
-		Stream.generate(randNumsSup).limit(personsCount)
-									.forEach(nums -> personLottoList.add(new PersonLotto(persons[seq.getAndIncrement()], nums)));
-	
+		/** 사람들에게 각각 랜덤한 숫자들을 제공 **/
+		IntStream.range(0, personsCount)
+        		.forEach(idx -> personLottoList.add(new PersonLotto(persons[idx], randNumsSup.get())));
+		
 		System.out.println("숫자들을 제공받은 사람들 목록 출력:");
         for (PersonLotto person : personLottoList) {
             System.out.println(person.getName() + ": " + Arrays.toString(person.getNumbers()));

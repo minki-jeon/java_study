@@ -1,4 +1,4 @@
-package main.study.java;
+package main.study.practice;
 
 import java.util.ArrayList;
 import java.util.Arrays;

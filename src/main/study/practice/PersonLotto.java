@@ -1,4 +1,4 @@
-package main.study.java;
+package main.study.practice;
 
 public class PersonLotto {
 	

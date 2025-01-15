@@ -7,9 +7,9 @@ import java.util.Random;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
-public class TestFunctionJava8 {
+public class FunctionJava8 {
 	/**
-	 * JAVA8 Functional Test
+	 * JAVA8 Functional Practice
 	 * reference: https://github.com/haru-note/tech-interview/blob/main/src/main/java/net/harunote/java8/functional/
 	 * functional: Consumer, Function, Predicate, Supplier
 	 */
@@ -20,7 +20,7 @@ public class TestFunctionJava8 {
 	 * Supplier: 입력을 전달받지않고 구현된 작업을 수행하여 값을 반환(공급)한다. (객체 생성 및 값 생성, 지연 초기화)
 	 */
 	/**
-	 * Test Program Name: 로또복권 프로그램 
+	 * Practice Program Name: 로또복권 프로그램 
 	 * Description:
 	 *  	1. 임의의 인원들에게 랜덤한 숫자들을 제공한다. (로또복권 제공)
 	 * 		2. 별도로 랜덤한 숫자들을 생성한다. (로또복권 당첨번호 반환)

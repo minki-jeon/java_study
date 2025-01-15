@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
@@ -34,10 +35,10 @@ public class FunctionJava8 {
 	 * 		3. Function: 각 인원들의 일치한 숫자의 개수를 반환
 	 * 		4. Consumer: 일치한 숫자의 개수가 가장 많은 인원의 이름을 출력
 	 * TODO
-	 * 		당첨번호를 제공받은 인원들의 숫자들을 각각 비교하여 일치되는 숫자의 개수 반환
 	 * 		가장 많은 숫자가 일치한 인원들의 이름을 반환, 출력
-	 * 		당첨번호 중 보너스 숫자 추출 로직 추가
+	 * 		로또번호 등수 계산, 출력
 	 * 		예외처리 (Null 등)
+	 * 		당첨+보너스번호 별도 객체 생성
 	 */
 	
 	/** 생성할 숫자의 개수 **/
@@ -49,6 +50,18 @@ public class FunctionJava8 {
 	private final static Supplier<int[]> randNumbersSup = () -> getNumbers();
 	/** 랜덤한 숫자 1개 생성 **/
 	private final static Supplier<Integer> randNumSup = () -> new Random().nextInt(__numberMax__ + 1);
+
+	/** 숫자 포함 여부 체크 **/
+	private final static PersonLottoPredicate plp = new IsNumberPredicate();
+	
+	/** 당첨번호 6개 + 보너스 1개 생성 **/
+	private final static Supplier<Map<String, Object>> winNumbersSup = () -> getWinNumbers();
+    /** 당첨번호+보너스번호 저장 **/
+	private final static Map<String, Object> winNumsMap = winNumbersSup.get();
+	/** 당첨번호 **/
+	private static int[] __winNums__ = new int[__numberCount__];
+	/** 보너스번호 **/
+	private static int __bonusNum__ = 0;
 	
 	public static void main(String[] args) {
 		/** 임의의 사람들 **/
@@ -63,22 +76,38 @@ public class FunctionJava8 {
 		IntStream.range(0, personsCount)
         		.forEach(idx -> personLottoList.add(new PersonLotto(persons[idx], randNumbersSup.get())));
 		
-		System.out.println("숫자들을 제공받은 사람들 목록 출력:");
+//		System.out.println("숫자들을 제공받은 사람들 목록 출력:");
+//        for (PersonLotto person : personLottoList) {
+//            System.out.println(person.getName() + ": " + Arrays.toString(person.getNumbers()));
+//        }
+        
+        /** 당첨번호 + 보너스번호 **/
+        for (Map.Entry<String, Object> entry : winNumsMap.entrySet()) {
+        	if ("winNums".equals(entry.getKey())) __winNums__ = (int[]) entry.getValue();
+        	if ("bonusNum".equals(entry.getKey())) __bonusNum__ = (int) entry.getValue();
+		}
+        System.out.println("당첨번호: " + Arrays.toString(__winNums__));
+        System.out.println("보너스번호: " + __bonusNum__);
+        
+        /** 일치한 당첨번호 개수 + 보너스번호 일치 여부 set **/
+        Function<PersonLotto, Integer> matchNumberCount = pl -> isNumberCount(pl);
+        int bonusNum = __bonusNum__;
         for (PersonLotto person : personLottoList) {
-            System.out.println(person.getName() + ": " + Arrays.toString(person.getNumbers()));
+        	person.setWinCount(matchNumberCount.apply(person));
+        	person.setBonus(isNumber(person, bonusNum, plp));
         }
         
-        /** 당첨번호 6개 + 보너스 1개 생성 **/
-        Supplier<Map<String, Object>> winNumbersSup = () -> getWinNumbers();
-        Map<String, Object> winNumsMap = winNumbersSup.get();
-        int[] winNums = new int[__numberCount__];
-        int bonusNum = 0;
-        for (Map.Entry<String, Object> entry : winNumsMap.entrySet()) {
-        	if ("winNums".equals(entry.getKey())) winNums = (int[]) entry.getValue();
-        	if ("bonusNum".equals(entry.getKey())) bonusNum = (int) entry.getValue();
-		}
-        System.out.println("당첨번호: " + Arrays.toString(winNums));
-        System.out.println("보너스번호: " + bonusNum);
+        /** 당첨 결과 출력 **/
+        System.out.println("당첨 개수 출력:");
+        for (PersonLotto person : personLottoList) {
+        	System.out.println(person.getName() + ": " + Arrays.toString(person.getNumbers()));
+            System.out.println(person.getName() + " 당첨 개수: " + person.getWinCount() + ", 보너스 일치: " + person.isBonus());
+        }
+        
+        /** TODO 당첨번호와 일치하는 개수가 많은 사람의 이름과 개수 출력 **/
+        
+        /** TODO 사람들의 로또복권 등수 출력 (보너스번호 포함 계산) **/
+        
 	}
 	
 	/**
@@ -86,16 +115,16 @@ public class FunctionJava8 {
 	 * @return int[]
 	 */
 	private static int[] getNumbers() {
-		int[] numbers = new int[__numberCount__];
+		int[] resultArr = new int[__numberCount__];
 		Random random = new Random();
 		
-		numbers = random.ints(1, __numberMax__ + 1)	// 랜덤 생성할 정수의 범위
+		resultArr = random.ints(1, __numberMax__ + 1)	// 랜덤 생성할 정수의 범위
 		                .distinct()                 // 중복 제거
 		                .limit(__numberCount__)     // 생성 개수
 		                .sorted()					// 정렬
 		                .toArray();                 // 생성한 숫자를 배열로 변환
 		
-		return numbers;
+		return resultArr;
 	}
 	
 	/**
@@ -103,7 +132,7 @@ public class FunctionJava8 {
 	 * @return Map<String, Object>
 	 */
 	private static Map<String, Object> getWinNumbers() {
-		Map<String, Object> winNumsMap = new HashMap<String, Object>();
+		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
 		/** 당첨번호 **/
 		int[] randNums = randNumbersSup.get();
@@ -113,7 +142,6 @@ public class FunctionJava8 {
 		
 		/** 보너스번호 중복 체크 **/
 		PersonLotto pl = new PersonLotto("WIN-NUMBERS", randNums);
-		PersonLottoPredicate plp = new IsNumberPredicate();
 		boolean isNum = isNumber(pl, bonusNum, plp);
 		while (isNum) {
 			bonusNum = randNumSup.get();
@@ -121,9 +149,9 @@ public class FunctionJava8 {
 		}
 		
 		/** 당첨번호 반환 **/
-		winNumsMap.put("winNums", randNums);
-		winNumsMap.put("bonusNum", bonusNum);
-		return winNumsMap;
+		resultMap.put("winNums", randNums);
+		resultMap.put("bonusNum", bonusNum);
+		return resultMap;
 	}
 	
 	/**
@@ -137,4 +165,21 @@ public class FunctionJava8 {
 		return predicate.test(pl, number);
 	}
 
+	/**
+	 * 당첨번호와 일치하는 숫자의 개수를 반환한다.
+	 * @param pl
+	 * @return int
+	 */
+	private static int isNumberCount(PersonLotto pl) {
+		int resultInt = 0;
+		
+		/** 당첨번호  **/
+        int[] winNums = __winNums__;
+        
+        for (int num : winNums) {
+        	if (isNumber(pl, num, plp)) resultInt++;
+        }
+		
+		return resultInt;
+	}
 }

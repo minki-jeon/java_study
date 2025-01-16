@@ -36,9 +36,11 @@ public class FunctionJava8 {
 	 * 		4. Consumer: 일치한 숫자의 개수가 가장 많은 인원의 이름을 출력
 	 * TODO
 	 * 		가장 많은 숫자가 일치한 인원들의 이름을 반환, 출력
-	 * 		로또번호 등수 계산, 출력
+	 * 		로또번호 등수 계산, 출력 (기존 로또복권 등수 시스템 차용)
 	 * 		예외처리 (Null 등)
 	 * 		당첨+보너스번호 별도 객체 생성
+	 * 		사람 인원 수를 기준으로 등수별 복권 당첨 금액을 설정
+	 * 		출력하는 부분들은 모두 별도 메소드로 분리하여 모든 작업을 수행한 이후 출력하도록 수정
 	 */
 	
 	/** 생성할 숫자의 개수 **/
@@ -104,7 +106,31 @@ public class FunctionJava8 {
             System.out.println(person.getName() + " 당첨 개수: " + person.getWinCount() + ", 보너스 일치: " + person.isBonus());
         }
         
-        /** TODO 당첨번호와 일치하는 개수가 많은 사람의 이름과 개수 출력 **/
+        /** 당첨번호와 일치하는 개수가 많은 사람의 이름과 개수 출력 (보너스 제외) **/
+        int maxWinCount = 0;
+        List<String> maxCntPersons = new ArrayList<String>();
+        int winCount = 0;
+        for (PersonLotto person : personLottoList) {
+        	winCount = person.getWinCount();
+        	
+        	if (winCount < 1 || winCount < maxWinCount)	continue;
+        	
+        	if (winCount > maxWinCount) {
+        		/** 당첨번호 개수가 이전 사람보다 많은 경우 **/
+        		if (maxWinCount != 0) maxCntPersons.clear();        		
+    			maxWinCount = winCount;
+        		maxCntPersons.add(person.getName());
+        	} else {
+        		/** 당첨번호 개수가 동일한 경우 **/
+        		maxCntPersons.add(person.getName());
+        	}
+        }
+        //* 출력
+        if (maxWinCount != 0) {
+        	System.out.println("당첨번호를 " + maxWinCount + "개로 가장 많은 숫자를 맞춘 사람: " + maxCntPersons);
+        } else {
+        	System.out.println("당첨번호를 맞춘 사람이 존재하지 않습니다.");
+        }
         
         /** TODO 사람들의 로또복권 등수 출력 (보너스번호 포함 계산) **/
         

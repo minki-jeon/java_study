@@ -35,23 +35,28 @@ public class FunctionJava8 {
 	 * 		3. Function: 각 인원들의 일치한 숫자의 개수를 반환
 	 * 		4. Consumer: 일치한 숫자의 개수가 가장 많은 인원의 이름을 출력
 	 * TODO
-	 * 		가장 많은 숫자가 일치한 인원들의 이름을 반환, 출력
-	 * 		로또번호 등수 계산, 출력 (기존 로또복권 등수 시스템 차용)
-	 * 		예외처리 (Null 등)
-	 * 		당첨+보너스번호 별도 객체 생성
-	 * 		사람 인원 수를 기준으로 등수별 복권 당첨 금액을 설정
-	 * 		출력하는 부분들은 모두 별도 메소드로 분리하여 모든 작업을 수행한 이후 출력하도록 수정
+	 * 		1. 사람 인원 수를 기준으로 등수별 복권 당첨 금액을 설정
+	 * 		2. personLottoList 객체 리스트를 반복 구현한 기능들을 통합
+	 * 		3. 출력 기능 포함한 main 내의 각각의 기능들을 별도 메소드로 분리
+	 * 		4. PersonLotto 객체에 당첨 순위(rank) 추가
+	 * 		5. 당첨+보너스번호 별도 객체 생성
+	 * TODO 예외처리
+	 * 		1. 상수 __numberCount__, __numberMax__ 최소&최대값 설정
+	 * 		2. 기본 로직 예외처리 (Null 등)
+	 * 		3. 사람의 이름이 동일한 경우(동명이인) : 객체에 고유값 추가 (시퀀스번호)
 	 */
 	
 	/** 생성할 숫자의 개수 **/
+//	private final static int __numberCount__ = 5;	//test
 	private final static int __numberCount__ = 6;
 	/** 랜덤으로 생성할 숫자의 최대값 **/
+//	private final static int __numberMax__ = 7;		//test
 	private final static int __numberMax__ = 45;
 
 	/** 랜덤한 숫자 배열 생성 **/
 	private final static Supplier<int[]> randNumbersSup = () -> getNumbers();
 	/** 랜덤한 숫자 1개 생성 **/
-	private final static Supplier<Integer> randNumSup = () -> new Random().nextInt(__numberMax__ + 1);
+	private final static Supplier<Integer> randNumSup = () -> new Random().nextInt(1, __numberMax__ + 1);
 
 	/** 숫자 포함 여부 체크 **/
 	private final static PersonLottoPredicate plp = new IsNumberPredicate();
@@ -68,7 +73,8 @@ public class FunctionJava8 {
 	public static void main(String[] args) {
 		/** 임의의 사람들 **/
 		String[] persons = {"배대준", "고형주", "노주원", "추태훈", "송정주"
-							, "서철희", "설희윤", "남윤주", "배종일", "손문옥"};
+							, "서철희", "설희윤", "남윤주", "배종일", "손문옥"
+							, "정예숙", "손효민", "성하훈", "남궁종희", "류남혁"};
 		int personsCount = persons.length;
 		
 		/** 숫자들을 제공받은 사람들 **/
@@ -132,8 +138,41 @@ public class FunctionJava8 {
         	System.out.println("당첨번호를 맞춘 사람이 존재하지 않습니다.");
         }
         
-        /** TODO 사람들의 로또복권 등수 출력 (보너스번호 포함 계산) **/
-        
+        /** 
+         * 사람들의 로또복권 등수 출력 (보너스번호 포함 계산)
+         * 1등(6개 일치), 2등(5개 일치 + 보너스 일치), 3등(5개 일치), 4등(4개 일치), 5등(3개 일치)
+         **/
+        int numberCount = __numberCount__;
+        winCount = 0;
+        for (PersonLotto person : personLottoList) {
+        	winCount = person.getWinCount();
+        	if (winCount < numberCount - 3) {
+        		//* Un-Rank
+        		System.out.println(person.getName() + "님은 " + winCount + "개를 맞추셔서, 당첨이 되지 못하였습니다.");
+        	} else if (winCount == numberCount - 3) {
+        		//* 5등
+        		System.out.println(person.getName() + "님은 " + winCount + "개를 맞추셔서, 5등에 당첨되셨습니다.");
+        	} else if (winCount == numberCount - 2) {
+        		//* 4등
+        		System.out.println(person.getName() + "님은 " + winCount + "개를 맞추셔서, 4등에 당첨되셨습니다.");
+        		
+        	} else if (winCount == numberCount - 1 && ! person.isBonus()) {
+        		//* 3등
+        		System.out.println(person.getName() + "님은 " + winCount + "개를 맞추셔서, 3등에 당첨되셨습니다.");
+        		
+        	} else if (winCount == numberCount - 1 && person.isBonus()) {
+        		//* 2등
+        		System.out.println(person.getName() + "님은 " + winCount + "개와 보너스 번호를 맞추셔서, 2등에 당첨되셨습니다.");
+        		
+        	} else if (winCount == numberCount) {
+        		//* 1등
+        		System.out.println(person.getName() + "님은 " + winCount + "개 모두 맞추셔서, 1등에 당첨되셨습니다.");
+        		
+        	} else {
+        		//* Error
+        		System.out.println("Error Rank Check");
+        	}
+        }
 	}
 	
 	/**

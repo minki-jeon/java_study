@@ -39,26 +39,27 @@ public class FunctionJava8 {
 	 * 		2. personLottoList 객체 리스트를 반복 구현한 기능들을 통합
 	 * 		3. 출력 기능 포함한 main 내의 각각의 기능들을 별도 메소드로 분리
 	 * 		4. PersonLotto 객체에 당첨 순위(rank) 추가
-	 * 		5. 당첨+보너스번호 별도 객체 생성
-	 * 		6. 상수변수, 전역변수의 변수명이 명확히 구분되도록 수정
+	 * 		5. 당첨+보너스번호 별도 객체 생성 + 전체 판매금액 + 전체 당첨금액 + 등수별 당첨 인원수
 	 * TODO 예외처리
 	 * 		1. 상수 NUMBER_COUNT, NUMBER_MAX 최소&최대값 설정
 	 * 		2. 기본 로직 예외처리 (Null 등)
 	 * 		3. 사람의 이름이 동일한 경우(동명이인) : 객체에 고유값 추가 (시퀀스번호)
 	 * TODO 추후 추가하면 좋을 기능
-	 * 		1. 사람 1명 당 복권 1개에서 복권 여러개 매핑
-	 * 		2. 통계: 복권에서 입력된 숫자들의 통계 (가장 많이 입력된 숫자부터 정렬)
+	 * 		1. 사람 1명 당 복권 1개에서 복권 여러개 매핑 (복권의 수량도 각각 랜덤으로 설정)
+	 * 		2. 통계: 복권에서 입력된 숫자들의 통계 (가장 많이 입력된 숫자부터 정렬) + 사람 1인당 평균 복권의 수량에 대한 통계
 	 * 		3. 복권 수동 입력: 기존 자동(랜덤) 뿐만 아닌 숫자들을 입력 받아서 복권 등록하는 기능
 	 * 		4. 사람+복권 또는 기존 사람의 복권 추가 등록: 사람과 복권을 추가로 입력 받아 등록하는 기능과 기존에 등록된 사람의 복권을 추가 등록하는 기능
 	 * 		5. 생성할 숫자의 개수와 생성할 숫자의 최대값을 별도로 입력받고서 작업을 수행하는 기능
 	 */
 	
 	/** 생성할 숫자의 개수 **/
-//	private final static int NUMBER_COUNT = 5;	//test
-	private final static int NUMBER_COUNT = 6;
+//	private final static int NUMBER_COUNT = 6;
+	private final static int NUMBER_COUNT = 5;	//test
 	/** 랜덤으로 생성할 숫자의 최대값 **/
-//	private final static int NUMBER_MAX = 7;	//test
-	private final static int NUMBER_MAX = 45;
+//	private final static int NUMBER_MAX = 45;
+	private final static int NUMBER_MAX = 8;	//test
+	/** 복권 1장 기준 가격 **/
+	private final static int COST = 10000;
 
 	/** 랜덤한 숫자 배열 생성 **/
 	private final static Supplier<int[]> RAND_NUMBERS_SUP = () -> getNumbers();
@@ -81,6 +82,8 @@ public class FunctionJava8 {
 		/** 임의의 사람들 **/
 		String[] persons = {"배대준", "고형주", "노주원", "추태훈", "송정주"
 							, "서철희", "설희윤", "남윤주", "배종일", "손문옥"
+							, "고기웅", "배은영", "류창민", "권지수", "고정재"
+							, "임용욱", "풍만옥", "오시하", "심인태", "권진환"
 							, "정예숙", "손효민", "성하훈", "남궁종희", "류남혁"};
 		int personsCount = persons.length;
 		
@@ -151,6 +154,13 @@ public class FunctionJava8 {
          **/
         int numberCount = NUMBER_COUNT;
         winCount = 0;
+        /** 당첨등수별 당첨인원 **/
+        int numA = 0;
+        int numB = 0;
+        int numC = 0;
+        int numD = 0;
+        int numE = 0;
+        
         for (PersonLotto person : personLottoList) {
         	winCount = person.getWinCount();
         	if (winCount < numberCount - 3) {
@@ -158,21 +168,23 @@ public class FunctionJava8 {
         		System.out.println(person.getName() + "님은 " + winCount + "개를 맞추셔서, 당첨이 되지 못하였습니다.");
         	} else if (winCount == numberCount - 3) {
         		//* 5등
+        		numE++;
         		System.out.println(person.getName() + "님은 " + winCount + "개를 맞추셔서, 5등에 당첨되셨습니다.");
         	} else if (winCount == numberCount - 2) {
         		//* 4등
+        		numD++;
         		System.out.println(person.getName() + "님은 " + winCount + "개를 맞추셔서, 4등에 당첨되셨습니다.");
-        		
         	} else if (winCount == numberCount - 1 && ! person.isBonus()) {
         		//* 3등
+        		numC++;
         		System.out.println(person.getName() + "님은 " + winCount + "개를 맞추셔서, 3등에 당첨되셨습니다.");
-        		
         	} else if (winCount == numberCount - 1 && person.isBonus()) {
         		//* 2등
+        		numB++;
         		System.out.println(person.getName() + "님은 " + winCount + "개와 보너스 번호를 맞추셔서, 2등에 당첨되셨습니다.");
-        		
         	} else if (winCount == numberCount) {
         		//* 1등
+        		numA++;
         		System.out.println(person.getName() + "님은 " + winCount + "개 모두 맞추셔서, 1등에 당첨되셨습니다.");
         		
         	} else {
@@ -180,6 +192,45 @@ public class FunctionJava8 {
         		System.out.println("Error Rank Check");
         	}
         }
+        
+        
+        /** 
+         * 복권 수를 기준으로 등수별 복권 당첨 금액을 설정
+         * 1등(30%), 2등(10%), 3등(10%), 4등(15%), 5등(20%) 
+         **/
+        int cost = COST;	// 1장당 가격
+        int count = 0;		// 수량
+        int totalCost = 0;	// 전체 가격
+        
+        //* TODO 사람의 수가 아닌 복권의 수량으로 카운트를 할 수 있도록 로직 수정
+        count = personsCount;
+        totalCost = cost * count;
+        //* TODO 등수별 당첨금액 비율 상수로 설정
+        long moneyA = (long) (totalCost * 0.3);
+        long moneyB = (long) (totalCost * 0.25);
+        long moneyC = (long) (totalCost * 0.2);
+        long moneyD = (long) (totalCost * 0.15);
+        long moneyE = (long) (totalCost * 0.1);
+        //* 계산 로직 변경 (리스트+반복문)
+        long amountA = numA != 0 ? moneyA / numA : 0;
+        long amountB = numB != 0 ? moneyB / numB : 0;
+        long amountC = numC != 0 ? moneyC / numC : 0;
+        long amountD = numD != 0 ? moneyD / numD : 0;
+        long amountE = numE != 0 ? moneyE / numE : 0;
+        
+        System.out.println("1위 전체 당첨금액: " + moneyA);
+        System.out.println("1위인 사람의 수: " + numA + ", 1위 당첨금액: " + amountA);
+        System.out.println("2위 전체 당첨금액: " + moneyB);
+        System.out.println("2위인 사람의 수: " + numB + ", 2위 당첨금액: " + amountB);
+        System.out.println("3위 전체 당첨금액: " + moneyC);
+        System.out.println("3위인 사람의 수: " + numC + ", 3위 당첨금액: " + amountC);
+        System.out.println("4위 전체 당첨금액: " + moneyD);
+        System.out.println("4위인 사람의 수: " + numD + ", 4위 당첨금액: " + amountD);
+        System.out.println("5위 전체 당첨금액: " + moneyE);
+        System.out.println("5위인 사람의 수: " + numE + ", 5위 당첨금액: " + amountE);
+        
+        
+        
 	}
 	
 	/**

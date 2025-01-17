@@ -35,28 +35,35 @@ public class FunctionJava8 {
 	 * 		3. Function: 각 인원들의 일치한 숫자의 개수를 반환
 	 * 		4. Consumer: 일치한 숫자의 개수가 가장 많은 인원의 이름을 출력
 	 * TODO
-	 * 		1. 사람 인원 수를 기준으로 등수별 복권 당첨 금액을 설정
+	 * 		1. 사람 인원 (복권) 수를 기준으로 등수별 복권 당첨 금액을 설정
 	 * 		2. personLottoList 객체 리스트를 반복 구현한 기능들을 통합
 	 * 		3. 출력 기능 포함한 main 내의 각각의 기능들을 별도 메소드로 분리
 	 * 		4. PersonLotto 객체에 당첨 순위(rank) 추가
 	 * 		5. 당첨+보너스번호 별도 객체 생성
+	 * 		6. 상수변수, 전역변수의 변수명이 명확히 구분되도록 수정
 	 * TODO 예외처리
 	 * 		1. 상수 __numberCount__, __numberMax__ 최소&최대값 설정
 	 * 		2. 기본 로직 예외처리 (Null 등)
 	 * 		3. 사람의 이름이 동일한 경우(동명이인) : 객체에 고유값 추가 (시퀀스번호)
+	 * TODO 추후 추가하면 좋을 기능
+	 * 		1. 사람 1명 당 복권 1개에서 복권 여러개 매핑
+	 * 		2. 통계: 복권에서 입력된 숫자들의 통계 (가장 많이 입력된 숫자부터 정렬)
+	 * 		3. 복권 수동 입력: 기존 자동(랜덤) 뿐만 아닌 숫자들을 입력 받아서 복권 등록하는 기능
+	 * 		4. 사람+복권 또는 기존 사람의 복권 추가 등록: 사람과 복권을 추가로 입력 받아 등록하는 기능과 기존에 등록된 사람의 복권을 추가 등록하는 기능
+	 * 		5. 생성할 숫자의 개수와 생성할 숫자의 최대값을 별도로 입력받고서 작업을 수행하는 기능
 	 */
 	
 	/** 생성할 숫자의 개수 **/
-//	private final static int __numberCount__ = 5;	//test
-	private final static int __numberCount__ = 6;
+//	private final static int NUMBER_COUNT = 5;	//test
+	private final static int NUMBER_COUNT = 6;
 	/** 랜덤으로 생성할 숫자의 최대값 **/
-//	private final static int __numberMax__ = 7;		//test
-	private final static int __numberMax__ = 45;
+//	private final static int NUMBER_MAX = 7;	//test
+	private final static int NUMBER_MAX = 45;
 
 	/** 랜덤한 숫자 배열 생성 **/
 	private final static Supplier<int[]> randNumbersSup = () -> getNumbers();
 	/** 랜덤한 숫자 1개 생성 **/
-	private final static Supplier<Integer> randNumSup = () -> new Random().nextInt(1, __numberMax__ + 1);
+	private final static Supplier<Integer> randNumSup = () -> new Random().nextInt(1, NUMBER_MAX + 1);
 
 	/** 숫자 포함 여부 체크 **/
 	private final static PersonLottoPredicate plp = new IsNumberPredicate();
@@ -66,7 +73,7 @@ public class FunctionJava8 {
     /** 당첨번호+보너스번호 저장 **/
 	private final static Map<String, Object> winNumsMap = winNumbersSup.get();
 	/** 당첨번호 **/
-	private static int[] __winNums__ = new int[__numberCount__];
+	private static int[] __winNums__ = new int[NUMBER_COUNT];
 	/** 보너스번호 **/
 	private static int __bonusNum__ = 0;
 	
@@ -142,7 +149,7 @@ public class FunctionJava8 {
          * 사람들의 로또복권 등수 출력 (보너스번호 포함 계산)
          * 1등(6개 일치), 2등(5개 일치 + 보너스 일치), 3등(5개 일치), 4등(4개 일치), 5등(3개 일치)
          **/
-        int numberCount = __numberCount__;
+        int numberCount = NUMBER_COUNT;
         winCount = 0;
         for (PersonLotto person : personLottoList) {
         	winCount = person.getWinCount();
@@ -180,12 +187,12 @@ public class FunctionJava8 {
 	 * @return int[]
 	 */
 	private static int[] getNumbers() {
-		int[] resultArr = new int[__numberCount__];
+		int[] resultArr = new int[NUMBER_COUNT];
 		Random random = new Random();
 		
-		resultArr = random.ints(1, __numberMax__ + 1)	// 랜덤 생성할 정수의 범위
+		resultArr = random.ints(1, NUMBER_MAX + 1)	// 랜덤 생성할 정수의 범위
 		                .distinct()                 // 중복 제거
-		                .limit(__numberCount__)     // 생성 개수
+		                .limit(NUMBER_COUNT)     // 생성 개수
 		                .sorted()					// 정렬
 		                .toArray();                 // 생성한 숫자를 배열로 변환
 		

@@ -2,10 +2,10 @@ package main.study.practice;
 
 public class PersonLotto {
 	
-	private String name;
-	private int[] numbers;
-	private int winCount;
-	private boolean isBonus;
+	private String name;		// 복권 구매자
+	private int[] numbers;		// 복권 등록번호
+	private int winCount;		// 당첨번호 일치 개수
+	private boolean isBonus;	// 보너스번호 일치 여부
 	
 	public PersonLotto(String name, int[] numbers) {
 		this.name = name;

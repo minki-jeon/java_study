@@ -36,13 +36,13 @@ public class FunctionJava8 {
 	 * 		4. Consumer: 일치한 숫자의 개수가 가장 많은 인원의 이름을 출력
 	 * TODO
 	 * 		1. 복권 수를 기준으로 등수별 복권 당첨 금액을 설정
-	 * 		2. personLottoList 객체 리스트를 반복 구현한 기능들을 통합
-	 * 		3. 출력 기능 포함한 main 내의 각각의 기능들을 별도 메소드로 분리
+	 * 		2. personLottoList 객체 리스트를 반복 구현한 기능들을 통합 (*반복구문 간소화)
+	 * 		//3. 출력 기능 포함한 main 내의 각각의 기능들을 별도 메소드로 분리
 	 * 		4. PersonLotto 객체에 당첨 순위(rank) 추가
-	 * 		5. 당첨+보너스번호 별도 객체 생성 + 전체 판매금액 + 전체 당첨금액 + 등수별 당첨 인원수
+	 * 		//5. 당첨+보너스번호 별도 객체 생성 + 전체 판매금액 + 전체 당첨금액 + 등수별 당첨 인원수
 	 * TODO 예외처리
 	 * 		1. 상수 NUMBER_COUNT, NUMBER_MAX 최소&최대값 설정
-	 * 		2. 기본 로직 예외처리 (Null 등)
+	 * 		2. 기본 로직 예외처리 (Null 등) 예외처리별 출력 메시지
 	 * 		3. 사람의 이름이 동일한 경우(동명이인) : 객체에 고유값 추가 (시퀀스번호)
 	 * TODO 추후 추가하면 좋을 기능
 	 * 		1. 사람 1명 당 복권 1개에서 복권 여러개 매핑 (복권의 수량도 각각 랜덤으로 설정)
@@ -52,14 +52,17 @@ public class FunctionJava8 {
 	 * 		5. 생성할 숫자의 개수와 생성할 숫자의 최대값을 별도로 입력받고서 작업을 수행하는 기능
 	 */
 	
+	/** 복권 정보 **/
+	private static Lotto __lotto__ = new Lotto();
+	private static final CreateNumber __CREATE_NUMBER__ = new CreateNumber();
+	
+	
 	/** 생성할 숫자의 개수 **/
-//	private final static int NUMBER_COUNT = 6;
-	private final static int NUMBER_COUNT = 5;	//test
+	private final static int NUMBER_COUNT = __CREATE_NUMBER__.getCount();
 	/** 랜덤으로 생성할 숫자의 최대값 **/
-//	private final static int NUMBER_MAX = 45;
-	private final static int NUMBER_MAX = 8;	//test
+	private final static int NUMBER_MAX =  __CREATE_NUMBER__.getMax();
 	/** 복권 1장 기준 가격 **/
-	private final static int COST = 10000;
+//	private final static int COST = Lotto.getCost();
 
 	/** 랜덤한 숫자 배열 생성 **/
 	private final static Supplier<int[]> RAND_NUMBERS_SUP = () -> new RandomNumbersSupplier().getNumbers();
@@ -69,14 +72,15 @@ public class FunctionJava8 {
 	/** 숫자 포함 여부 체크 **/
 	private final static PersonLottoPredicate PL_PRED = new IsNumberPredicate();
 	
+	
 	/** 당첨번호 6개 + 보너스 1개 생성 **/
-	private final static Supplier<Map<String, Object>> WIN_NUMBERS_SUP = () -> getWinNumbers();
+//	private final static Supplier<Map<String, Object>> WIN_NUMBERS_SUP = () -> getWinNumbers();
     /** 당첨번호+보너스번호 저장 **/
-	private final static Map<String, Object> WIN_NUMS_MAP = WIN_NUMBERS_SUP.get();
+//	private final static Map<String, Object> WIN_NUMS_MAP = WIN_NUMBERS_SUP.get();
 	/** 당첨번호 **/
-	private static int[] __winNums__ = new int[NUMBER_COUNT];
+//	private static int[] __winNums__ = new int[NUMBER_COUNT];
 	/** 보너스번호 **/
-	private static int __bonusNum__ = 0;
+//	private static int __bonusNum__ = 0;
 	
 	public static void main(String[] args) {
 		/** 임의의 사람들 **/
@@ -85,77 +89,93 @@ public class FunctionJava8 {
 							, "고기웅", "배은영", "류창민", "권지수", "고정재"
 							, "임용욱", "풍만옥", "오시하", "심인태", "권진환"
 							, "정예숙", "손효민", "성하훈", "남궁종희", "류남혁"};
-		int personsCount = persons.length;
-		
-		/** 숫자들을 제공받은 사람들 **/
-		List<PersonLotto> personLottoList = new ArrayList<PersonLotto>();
 		
 		/** 사람들에게 각각 랜덤한 숫자들을 제공 **/
-		IntStream.range(0, personsCount)
-        		.forEach(idx -> personLottoList.add(new PersonLotto(persons[idx], RAND_NUMBERS_SUP.get())));
+		List<PersonLotto> personLottoList = addTicketOfPersons(persons, new ArrayList<PersonLotto>());
 		
-//		System.out.println("숫자들을 제공받은 사람들 목록 출력:");
-//        for (PersonLotto person : personLottoList) {
-//            System.out.println(person.getName() + ": " + Arrays.toString(person.getNumbers()));
-//        }
-        
-        /** 당첨번호 + 보너스번호 **/
-        for (Map.Entry<String, Object> entry : WIN_NUMS_MAP.entrySet()) {
-        	if ("winNums".equals(entry.getKey())) __winNums__ = (int[]) entry.getValue();
-        	if ("bonusNum".equals(entry.getKey())) __bonusNum__ = (int) entry.getValue();
-		}
-        System.out.println("당첨번호: " + Arrays.toString(__winNums__));
-        System.out.println("보너스번호: " + __bonusNum__);
+        /** 당첨번호 + 보너스번호 set **/
+		setLottoNumbers(() -> getWinNumbers());
         
         /** 일치한 당첨번호 개수 + 보너스번호 일치 여부 set **/
-        Function<PersonLotto, Integer> matchNumberCount = pl -> isNumberCount(pl);
-        int bonusNum = __bonusNum__;
-        for (PersonLotto person : personLottoList) {
-        	person.setWinCount(matchNumberCount.apply(person));
-        	person.setBonus(isNumber(person, bonusNum, PL_PRED));
-        }
+        setResultMatch(pl -> isNumberCount(pl), personLottoList);
         
         /** 당첨 결과 출력 **/
-        System.out.println("당첨 개수 출력:");
-        for (PersonLotto person : personLottoList) {
-        	System.out.println(person.getName() + ": " + Arrays.toString(person.getNumbers()));
-            System.out.println(person.getName() + " 당첨 개수: " + person.getWinCount() + ", 보너스 일치: " + person.isBonus());
-        }
-        
-        
         /** 당첨번호와 일치하는 개수가 많은 사람의 이름과 개수 출력 (보너스 제외) **/
-        PersonLottoConsumer plConsumer = new PersonLottoConsumer();
-        plConsumer.accept(personLottoList);
-//        int maxWinCount = 0;
-//        List<String> maxCntPersons = new ArrayList<String>();
-//        int winCount = 0;
-//        for (PersonLotto person : personLottoList) {
-//        	winCount = person.getWinCount();
-//        	
-//        	if (winCount < 1 || winCount < maxWinCount)	continue;
-//        	
-//        	if (winCount > maxWinCount) {
-//        		/** 당첨번호 개수가 이전 사람보다 많은 경우 **/
-//        		if (maxWinCount != 0) maxCntPersons.clear();        		
-//    			maxWinCount = winCount;
-//        		maxCntPersons.add(person.getName());
-//        	} else {
-//        		/** 당첨번호 개수가 동일한 경우 **/
-//        		maxCntPersons.add(person.getName());
-//        	}
-//        }
-//        //* 출력
-//        if (maxWinCount != 0) {
-//        	System.out.println("당첨번호를 " + maxWinCount + "개로 가장 많은 숫자를 맞춘 사람: " + maxCntPersons);
-//        } else {
-//        	System.out.println("당첨번호를 맞춘 사람이 존재하지 않습니다.");
-//        }
+        resultPersons(personLottoList);
         
         /** 
          * 사람들의 로또복권 등수 출력 (보너스번호 포함 계산)
          * 1등(6개 일치), 2등(5개 일치 + 보너스 일치), 3등(5개 일치), 4등(4개 일치), 5등(3개 일치)
          **/
-        int numberCount = NUMBER_COUNT;
+        resultRank(personLottoList);
+        
+        /** 
+         * 복권 수를 기준으로 등수별 복권 당첨 금액을 설정
+         **/
+        resultAmount();
+        
+	}
+	
+	private static List<PersonLotto> addTicketOfPersons(String[] persons, List<PersonLotto> personLottoList) {
+		int personsCount = persons.length;
+		IntStream.range(0, personsCount)
+        		.forEach(idx -> personLottoList.add(new PersonLotto(persons[idx], RAND_NUMBERS_SUP.get())));
+		/** 복권 수량 set **/
+		//TODO 복권의 수량으로 set
+		__lotto__.setCount(personsCount);
+		
+		return personLottoList;
+	}
+	
+	/**
+	 * 당첨번호 + 보너스번호 set
+	 * @param winNumsSup
+	 */
+	private static void setLottoNumbers(Supplier<Map<String, Object>> winNumsSup) {
+		Map<String, Object> winNumsMap = winNumsSup.get();
+        for (Map.Entry<String, Object> entry : winNumsMap.entrySet()) {
+        	if ("winNums".equals(entry.getKey())) __lotto__.setWinNumbers((int[]) entry.getValue());
+        	if ("bonusNum".equals(entry.getKey())) __lotto__.setBonusNumber((int) entry.getValue());
+		}
+        System.out.println("당첨번호: " + Arrays.toString(__lotto__.getWinNumbers()));
+        System.out.println("보너스번호: " + __lotto__.getBonusNumber());
+	}
+	
+	/**
+	 * 일치한 당첨번호 개수 + 보너스번호 일치 여부 set 
+	 * @param matchNumberCount
+	 * @param personLottoList
+	 */
+	private static void setResultMatch(Function<PersonLotto, Integer> matchNumberCount, List<PersonLotto> personLottoList) {
+        int bonusNum = __lotto__.getBonusNumber();
+        for (PersonLotto person : personLottoList) {
+        	person.setWinCount(matchNumberCount.apply(person));
+        	person.setBonus(isNumber(person, bonusNum, PL_PRED));
+        }
+	}
+	
+	/**
+	 * 당첨 결과 출력 + 당첨번호와 일치하는 개수가 많은 사람의 이름과 개수 출력 (보너스 제외)
+	 * @param personLottoList
+	 */
+	private static void resultPersons(List<PersonLotto> personLottoList) {
+//        System.out.println("당첨 개수 출력:");
+//        for (PersonLotto person : personLottoList) {
+//        	System.out.println(person.getName() + ": " + Arrays.toString(person.getNumbers()));
+//            System.out.println(person.getName() + " 당첨 개수: " + person.getWinCount() + ", 보너스 일치: " + person.isBonus());
+//        }
+//        
+        PersonLottoConsumer plConsumer = new PersonLottoConsumer();
+        plConsumer.accept(personLottoList);
+	}
+	
+	/**
+	 * 사람들의 로또복권 등수 출력 (보너스번호 포함 계산)
+	 * 1등(6개 일치), 2등(5개 일치 + 보너스 일치), 3등(5개 일치), 4등(4개 일치), 5등(3개 일치)
+	 * @param personLottoList
+	 */
+	private static void resultRank(List<PersonLotto> personLottoList) {
+		int numberCount = NUMBER_COUNT;
         int winCount = 0;
         /** 당첨등수별 당첨인원 **/
         int numA = 0;
@@ -195,26 +215,39 @@ public class FunctionJava8 {
         		System.out.println("Error Rank Check");
         	}
         }
+        //등수별 당첨 수 set
+        __lotto__.setCount_1st(numA);
+        __lotto__.setCount_2nd(numB);
+        __lotto__.setCount_3rd(numC);
+        __lotto__.setCount_4th(numD);
+        __lotto__.setCount_5th(numE);
         
-        
-        /** 
-         * 복권 수를 기준으로 등수별 복권 당첨 금액을 설정
-         * 1등(30%), 2등(10%), 3등(10%), 4등(15%), 5등(20%) 
-         **/
-        int cost = COST;	// 1장당 가격
-        int count = 0;		// 수량
+	}
+	
+	/**
+	 * 복권 수를 기준으로 등수별 복권 당첨 금액 설정
+	 */
+	private static void resultAmount() {
+        int cost = Lotto.getCost();	// 1장당 가격
+        int count =  __lotto__.getCount();		// 수량
         int totalCost = 0;	// 전체 가격
+
+        int numA = __lotto__.getCount_1st();
+        int numB = __lotto__.getCount_2nd();
+        int numC = __lotto__.getCount_3rd();
+        int numD = __lotto__.getCount_4th();
+        int numE = __lotto__.getCount_5th();
+        
         
         //* TODO 사람의 수가 아닌 복권의 수량으로 카운트를 할 수 있도록 로직 수정
-        count = personsCount;
-        totalCost = cost * count;
+        totalCost = count != 0 ? cost * count : 0;
         //* TODO 등수별 당첨금액 비율 상수로 설정
-        long moneyA = (long) (totalCost * 0.3);
-        long moneyB = (long) (totalCost * 0.25);
-        long moneyC = (long) (totalCost * 0.2);
-        long moneyD = (long) (totalCost * 0.15);
-        long moneyE = (long) (totalCost * 0.1);
-        //* 계산 로직 변경 (리스트+반복문)
+        long moneyA = (long) (totalCost * Lotto.getAmountratio1st());
+        long moneyB = (long) (totalCost * Lotto.getAmountratio2nd());
+        long moneyC = (long) (totalCost * Lotto.getAmountratio3rd());
+        long moneyD = (long) (totalCost * Lotto.getAmountratio4th());
+        long moneyE = (long) (totalCost * Lotto.getAmountratio5th());
+        //* TODO 계산 로직 변경 (리스트+반복문)
         long amountA = numA != 0 ? moneyA / numA : 0;
         long amountB = numB != 0 ? moneyB / numB : 0;
         long amountC = numC != 0 ? moneyC / numC : 0;
@@ -232,26 +265,7 @@ public class FunctionJava8 {
         System.out.println("5위 전체 당첨금액: " + moneyE);
         System.out.println("5위인 사람의 수: " + numE + ", 5위 당첨금액: " + amountE);
         
-        
-        
 	}
-	
-	/**
-	 * 최댓값 __numberMax__+1 인 랜덤한 정수 개수 __numberCount__ 를 배열로 반환한다.
-	 * @return int[]
-	 */
-//	private static int[] getNumbers() {
-//		int[] resultArr = new int[NUMBER_COUNT];
-//		Random random = new Random();
-//		
-//		resultArr = random.ints(1, NUMBER_MAX + 1)	// 랜덤 생성할 정수의 범위
-//		                .distinct()                 // 중복 제거
-//		                .limit(NUMBER_COUNT)     // 생성 개수
-//		                .sorted()					// 정렬
-//		                .toArray();                 // 생성한 숫자를 배열로 변환
-//		
-//		return resultArr;
-//	}
 	
 	/**
 	 * 당첨번호와 보너스번호를 반환한다
@@ -300,7 +314,7 @@ public class FunctionJava8 {
 		int resultInt = 0;
 		
 		/** 당첨번호  **/
-        int[] winNums = __winNums__;
+        int[] winNums = __lotto__.getWinNumbers();
         
         for (int num : winNums) {
         	if (isNumber(pl, num, PL_PRED)) resultInt++;

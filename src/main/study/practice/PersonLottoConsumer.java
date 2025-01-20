@@ -1,12 +1,21 @@
 package main.study.practice;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class PersonLottoConsumer implements Consumer<List<PersonLotto>> {
 
 	public void accept(List<PersonLotto> personLottoList) {
+        /** 당첨 결과 출력 **/
+        System.out.println("당첨 개수 출력:");
+        for (PersonLotto person : personLottoList) {
+        	System.out.println(person.getName() + ": " + Arrays.toString(person.getNumbers()));
+            System.out.println(person.getName() + " 당첨 개수: " + person.getWinCount() + ", 보너스 일치: " + person.isBonus());
+        }
+
+        /** 당첨번호와 일치하는 개수가 많은 사람의 이름과 개수 출력 (보너스 제외) **/
 		int maxWinCount = 0;		// 가장 많이 맞춘 개수
         int winCount = 0;			// 맞춘 개수
         List<String> maxCntPersons = new ArrayList<String>();	// 가장 많이 맞춘 사람

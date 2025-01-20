@@ -62,7 +62,7 @@ public class FunctionJava8 {
 	private final static int COST = 10000;
 
 	/** 랜덤한 숫자 배열 생성 **/
-	private final static Supplier<int[]> RAND_NUMBERS_SUP = () -> getNumbers();
+	private final static Supplier<int[]> RAND_NUMBERS_SUP = () -> new RandomNumbersSupplier().getNumbers();
 	/** 랜덤한 숫자 1개 생성 **/
 	private final static Supplier<Integer> RAND_NUM_SUP = () -> new Random().nextInt(1, NUMBER_MAX + 1);
 
@@ -240,18 +240,18 @@ public class FunctionJava8 {
 	 * 최댓값 __numberMax__+1 인 랜덤한 정수 개수 __numberCount__ 를 배열로 반환한다.
 	 * @return int[]
 	 */
-	private static int[] getNumbers() {
-		int[] resultArr = new int[NUMBER_COUNT];
-		Random random = new Random();
-		
-		resultArr = random.ints(1, NUMBER_MAX + 1)	// 랜덤 생성할 정수의 범위
-		                .distinct()                 // 중복 제거
-		                .limit(NUMBER_COUNT)     // 생성 개수
-		                .sorted()					// 정렬
-		                .toArray();                 // 생성한 숫자를 배열로 변환
-		
-		return resultArr;
-	}
+//	private static int[] getNumbers() {
+//		int[] resultArr = new int[NUMBER_COUNT];
+//		Random random = new Random();
+//		
+//		resultArr = random.ints(1, NUMBER_MAX + 1)	// 랜덤 생성할 정수의 범위
+//		                .distinct()                 // 중복 제거
+//		                .limit(NUMBER_COUNT)     // 생성 개수
+//		                .sorted()					// 정렬
+//		                .toArray();                 // 생성한 숫자를 배열로 변환
+//		
+//		return resultArr;
+//	}
 	
 	/**
 	 * 당첨번호와 보너스번호를 반환한다

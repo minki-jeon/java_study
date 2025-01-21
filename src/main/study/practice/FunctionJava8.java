@@ -38,7 +38,7 @@ public class FunctionJava8 {
 	 * 		1. 복권 수를 기준으로 등수별 복권 당첨 금액을 설정 (*배열에서 리스트로 변경하여 전체적으로 로직 수정 필요)
 	 * 		2. personLottoList 객체 리스트를 반복 구현한 기능들을 통합 (*반복구문 간소화)
 	 * 		//3. 출력 기능 포함한 main 내의 각각의 기능들을 별도 메소드로 분리
-	 * 		4. PersonLotto 객체에 당첨 순위(rank) 추가
+	 * 		4. PersonLotto 객체에 당첨 순위(rank) 추가, 로직 추가
 	 * 		//5. 당첨+보너스번호 별도 객체 생성 + 전체 판매금액 + 전체 당첨금액 + 등수별 당첨 인원수
 	 * TODO 예외처리
 	 * 		1. 상수 NUMBER_COUNT, NUMBER_MAX 최소&최대값 설정

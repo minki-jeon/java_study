@@ -11,7 +11,8 @@ public class PersonLotto {
 	private int count;			// 복권 수량
 	private int winCount;		// 당첨번호 일치 개수	TODO Deprecated
 	private boolean isBonus;	// 보너스번호 일치 여부	TODO Deprecated
-	private List<Map<String, Object>> winInfoList;	// 당첨정보 (index, winCount, isBouns)
+	private int rank;			// 당첨 등수			TODO Deprecated
+	private List<Map<String, Object>> winInfoList;	// 당첨정보 (index, winCount, isBouns, Rank)
 	
 	public PersonLotto(String name, int[] numbers, List<int[]> tickets) {
 		this.name = name;

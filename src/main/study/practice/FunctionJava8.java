@@ -35,7 +35,7 @@ public class FunctionJava8 {
 	 * 		3. Function: 각 인원들의 일치한 숫자의 개수를 반환
 	 * 		4. Consumer: 일치한 숫자의 개수가 가장 많은 인원의 이름을 출력
 	 * TODO
-	 * 		1. 복권 수를 기준으로 등수별 복권 당첨 금액을 설정
+	 * 		1. 복권 수를 기준으로 등수별 복권 당첨 금액을 설정 (*배열에서 리스트로 변경하여 전체적으로 로직 수정 필요)
 	 * 		2. personLottoList 객체 리스트를 반복 구현한 기능들을 통합 (*반복구문 간소화)
 	 * 		//3. 출력 기능 포함한 main 내의 각각의 기능들을 별도 메소드로 분리
 	 * 		4. PersonLotto 객체에 당첨 순위(rank) 추가
@@ -50,6 +50,8 @@ public class FunctionJava8 {
 	 * 		3. 복권 수동 입력: 기존 자동(랜덤) 뿐만 아닌 숫자들을 입력 받아서 복권 등록하는 기능
 	 * 		4. 사람+복권 또는 기존 사람의 복권 추가 등록: 사람과 복권을 추가로 입력 받아 등록하는 기능과 기존에 등록된 사람의 복권을 추가 등록하는 기능
 	 * 		5. 생성할 숫자의 개수와 생성할 숫자의 최대값을 별도로 입력받고서 작업을 수행하는 기능
+	 * 		6. 각 기능별 결과 출력 작업 수행여부 플래그 적용 (isWork~)
+	 * 		7. 사람의 인원 수를 지정하면 해당 수만큼 랜덤으로 이름으로 생성한다. 
 	 */
 	
 	/** 복권 정보 **/
@@ -116,10 +118,38 @@ public class FunctionJava8 {
         
 	}
 	
+	/**
+	 * 랜덤하게 생성한 숫자들을 count 수만큼 생성하여 리스트로 반환
+	 * (한 사람의 제공되는 복권 수량만큼 랜덤숫자들을 생성)
+	 * @param int count
+	 * @return List<int[]> tickets
+	 */
+	private static List<int[]> createTickets(int count) {
+		List<int[]> tickets = new ArrayList<int[]>();
+		for (int i = 0; i < count; i++) {
+			tickets.add(RAND_NUMBERS_SUP.get());
+		}
+		
+		return tickets;
+	}
+	
+	/**
+	 * 사람들에게 각각 랜덤한 숫자들을 제공 (복권)
+	 * @param String[] persons
+	 * @param List<PersonLotto> personLottoList
+	 * @return List<PersonLotto> personLottoList
+	 */
 	private static List<PersonLotto> addTicketOfPersons(String[] persons, List<PersonLotto> personLottoList) {
 		int personsCount = persons.length;
+		int countTickets = 1;	// TODO 인원별 제공되는 복권 수량, 인원마다 다른 수량
 		IntStream.range(0, personsCount)
-        		.forEach(idx -> personLottoList.add(new PersonLotto(persons[idx], RAND_NUMBERS_SUP.get())));
+        		.forEach(idx -> personLottoList
+        						.add(new PersonLotto(persons[idx]
+        											, RAND_NUMBERS_SUP.get()
+        											, createTickets(countTickets)
+        							)
+        						)
+        		);
 		/** 복권 수량 set **/
 		//TODO 복권의 수량으로 set
 		__lotto__.setCount(personsCount);
@@ -147,10 +177,24 @@ public class FunctionJava8 {
 	 * @param personLottoList
 	 */
 	private static void setResultMatch(Function<PersonLotto, Integer> matchNumberCount, List<PersonLotto> personLottoList) {
-        int bonusNum = __lotto__.getBonusNumber();
+        List<Map<String, Object>> winInfoList = new ArrayList<Map<String,Object>>();
+		int bonusNum = __lotto__.getBonusNumber();
         for (PersonLotto person : personLottoList) {
+        	// TODO Deprecate 
         	person.setWinCount(matchNumberCount.apply(person));
         	person.setBonus(isNumber(person, bonusNum, PL_PRED));
+        	
+        	int num = 1;
+        	List<int[]> tickets = person.getTickets();
+        	for (int[] numbers : tickets) {
+        		person.setNumbers(numbers);
+        		Map<String, Object> winInfo = new HashMap<String, Object>();
+        		winInfo.put("NUMBER", num);
+        		winInfo.put("WINCOUNT", matchNumberCount.apply(person));
+        		winInfo.put("ISBONUS", isNumber(person, bonusNum, PL_PRED));
+        		winInfoList.add(winInfo);
+        		num++;
+        	}
         }
 	}
 	
@@ -280,8 +324,9 @@ public class FunctionJava8 {
 		/** 보너스번호 **/
 		int bonusNum = RAND_NUM_SUP.get();
 		
+		// TODO new PersonLotto() 수정
 		/** 보너스번호 중복 체크 **/
-		PersonLotto pl = new PersonLotto("WIN-NUMBERS", randNums);
+		PersonLotto pl = new PersonLotto("WIN-NUMBERS", randNums, null);
 		boolean isNum = isNumber(pl, bonusNum, PL_PRED);
 		while (isNum) {
 			bonusNum = RAND_NUM_SUP.get();

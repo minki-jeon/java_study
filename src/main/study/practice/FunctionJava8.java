@@ -85,6 +85,9 @@ public class FunctionJava8 {
 //	private static int __bonusNum__ = 0;
 	
 	public static void main(String[] args) {
+		/** 기본상수 체크 **/
+		chkDefault();
+		
 		/** 임의의 사람들 **/
 		String[] persons = {"배대준", "고형주", "노주원", "추태훈", "송정주"
 							, "서철희", "설희윤", "남윤주", "배종일", "손문옥"
@@ -116,6 +119,20 @@ public class FunctionJava8 {
          **/
         resultAmount();
         
+	}
+	
+	/**
+	 * 기본 상수 체크 (생성 숫자의 개수와 최대값)
+	 */
+	private static void chkDefault() {
+		boolean isChkNumberCount = NUMBER_COUNT < 4;
+		boolean isChkNumberMax = NUMBER_MAX <= NUMBER_COUNT;
+		
+		if (isChkNumberCount || isChkNumberMax) {
+			System.out.println("기본 상수의 값이 올바르지 않아 프로그램을 종료합니다.");
+			System.out.println("생성되는 번호의 개수와 최대값 설정을 확인바랍니다.");
+			System.exit(0);
+		}
 	}
 	
 	/**

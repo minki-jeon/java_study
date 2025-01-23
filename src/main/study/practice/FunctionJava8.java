@@ -54,10 +54,14 @@ public class FunctionJava8 {
 	 * 		7. 사람의 인원 수를 지정하면 해당 수만큼 랜덤으로 이름으로 생성한다. 
 	 */
 	
+	/** 출력 여부 **/
+	/**  모든 사람들의 번호일치여부 결과 출력 **/
+	private static final boolean __IS_PRINT_DETAILS__ = false;
+	
+	
 	/** 복권 정보 **/
 	private static Lotto __lotto__ = new Lotto();
 	private static final CreateNumber __CREATE_NUMBER__ = new CreateNumber();
-	
 	
 	/** 생성할 숫자의 개수 **/
 	private final static int NUMBER_COUNT = __CREATE_NUMBER__.getCount();
@@ -96,8 +100,9 @@ public class FunctionJava8 {
         
         /** 당첨 결과 출력 **/
         /** 당첨번호와 일치하는 개수가 많은 사람의 이름과 개수 출력 (보너스 제외) **/
-        resultPersons(personLottoList);
-        
+        if (__IS_PRINT_DETAILS__) {
+        	resultPersons(personLottoList);
+        }
         /** 
          * 사람들의 로또복권 등수 출력 (보너스번호 포함 계산)
          * 1등(6개 일치), 2등(5개 일치 + 보너스 일치), 3등(5개 일치), 4등(4개 일치), 5등(3개 일치)

@@ -41,7 +41,7 @@ public class FunctionJava8 {
 	 * 		4. PersonLotto 객체에 당첨 순위(rank) 추가, 로직 추가
 	 * 		//5. 당첨+보너스번호 별도 객체 생성 + 전체 판매금액 + 전체 당첨금액 + 등수별 당첨 인원수
 	 * TODO 예외처리
-	 * 		1. 상수 NUMBER_COUNT, NUMBER_MAX 최소&최대값 설정
+	 * 		//1. 상수 NUMBER_COUNT, NUMBER_MAX 최소&최대값 설정
 	 * 		2. 기본 로직 예외처리 (Null 등) 예외처리별 출력 메시지
 	 * 		3. 사람의 이름이 동일한 경우(동명이인) : 객체에 고유값 추가 (시퀀스번호)
 	 * TODO 추후 추가하면 좋을 기능
@@ -73,16 +73,6 @@ public class FunctionJava8 {
 
 	/** 숫자 포함 여부 체크 **/
 	private final static PersonLottoPredicate PL_PRED = new IsNumberPredicate();
-	
-	
-	/** 당첨번호 6개 + 보너스 1개 생성 **/
-//	private final static Supplier<Map<String, Object>> WIN_NUMBERS_SUP = () -> getWinNumbers();
-    /** 당첨번호+보너스번호 저장 **/
-//	private final static Map<String, Object> WIN_NUMS_MAP = WIN_NUMBERS_SUP.get();
-	/** 당첨번호 **/
-//	private static int[] __winNums__ = new int[NUMBER_COUNT];
-	/** 보너스번호 **/
-//	private static int __bonusNum__ = 0;
 	
 	public static void main(String[] args) {
 		/** 기본상수 체크 **/
@@ -220,12 +210,6 @@ public class FunctionJava8 {
 	 * @param personLottoList
 	 */
 	private static void resultPersons(List<PersonLotto> personLottoList) {
-//        System.out.println("당첨 개수 출력:");
-//        for (PersonLotto person : personLottoList) {
-//        	System.out.println(person.getName() + ": " + Arrays.toString(person.getNumbers()));
-//            System.out.println(person.getName() + " 당첨 개수: " + person.getWinCount() + ", 보너스 일치: " + person.isBonus());
-//        }
-//        
         PersonLottoConsumer plConsumer = new PersonLottoConsumer();
         plConsumer.accept(personLottoList);
 	}

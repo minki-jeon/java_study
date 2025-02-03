@@ -10,7 +10,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
-public class FunctionJava8 {
+public class AppFunctionJava8 {
 	/**
 	 * JAVA8 Functional Practice
 	 * reference: https://github.com/haru-note/tech-interview/blob/main/src/main/java/net/harunote/java8/functional/

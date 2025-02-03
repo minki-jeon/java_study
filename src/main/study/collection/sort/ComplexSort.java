@@ -45,9 +45,11 @@ public class ComplexSort {
 	 * 대상 객체의 출력
 	 */
 	private static void consoleLog() {
-		logger.info("######## 출력 시작 ########");
+//		logger.info("######## 출력 시작 ########");
+		System.out.println("########### 출력 시작 ###########");
 		for (Product product : products) {
-			logger.info("Print : {} = {}", product.getPrdId(), product.getPrdSize());
+//			logger.info("Print : {} = {}", product.getPrdId(), product.getPrdSize());
+			System.out.println("Print : " + product.getPrdId() + " = " + product.getPrdSize());
 		}
 	}
 	
@@ -60,6 +62,14 @@ public class ComplexSort {
 		products.add(new Product("tshirt", 110));
 		products.add(new Product("tshirt", 110));
 		products.add(new Product("tshirt", 110));
+		
+		products.add(new Product("shoes", 270));
+		products.add(new Product("shoes", 260));
+		products.add(new Product("shoes", 275));
+		
+		products.add(new Product("clothes", 44));
+		products.add(new Product("clothes", 55));
+		products.add(new Product("clothes", 66));
 	}
 
 }

@@ -7,5 +7,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="D:/01.private_work/workspace/plugin/lombok.jar"/>
+	<classpathentry kind="lib" path="D:/01.private_work/workspace/plugin/commons-collections4-4.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

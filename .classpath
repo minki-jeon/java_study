@@ -8,5 +8,9 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="D:/01.private_work/workspace/plugin/lombok.jar"/>
 	<classpathentry kind="lib" path="D:/01.private_work/workspace/plugin/commons-collections4-4.4.jar"/>
+	<classpathentry kind="lib" path="D:/01.private_work/workspace/plugin/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="D:/01.private_work/workspace/plugin/slf4j-log4j12-1.7.30.jar"/>
+	<classpathentry kind="lib" path="D:/01.private_work/workspace/plugin/log4j-api-2.17.1.jar"/>
+	<classpathentry kind="lib" path="D:/01.private_work/workspace/plugin/slf4j-api-1.7.30.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

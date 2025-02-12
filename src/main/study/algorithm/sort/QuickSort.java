@@ -5,7 +5,7 @@ import java.util.Arrays;
 /**
  * @Author : CodeVillains
  * @Description : 따로 메모리를 사용하지 않는다. 현재 있는 메모리 안에서 정렬하기 때문에 효율이 좋음 피봇을 하나 정해 피봇보다 작은 아이템은 왼쪽에 큰 것은
- * 오른쪽에 위치하고 왼쪽 아이템, 오른쪽 아이템을 각각 quick sort로 리컬시브하게 연산한다. performance : O(n log n), worst case
+ * 오른쪽에 위치하고 왼쪽 아이템, 오른쪽 아이템을 각각 quick sort로 Recursive(재귀적)하게 연산한다. performance : O(n log n), worst case
  * O(n^2) : 이미 정렬된 상태에서 실행할 경우 space complexity : O(log n)
  */
 public class QuickSort {
@@ -22,7 +22,8 @@ public class QuickSort {
 
 	private static void quickSort(int[] array, int start, int end) {
 		// low - index 시작, high - index 끝
-		if (vilid(array, start, end)) {
+		if (valid(array, start, end)) {
+			// 유효성검사
 			return;
 		}
 		
@@ -56,7 +57,7 @@ public class QuickSort {
 		}
 	}
 
-	private static boolean vilid(int[] array, int low, int high) {
+	private static boolean valid(int[] array, int low, int high) {
 		if (array.length == 0 || array == null) {
 			return true;
 		}

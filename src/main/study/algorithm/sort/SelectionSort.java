@@ -11,9 +11,21 @@ public class SelectionSort {
 	//* https://github.com/haru-note/tech-interview/blob/main/src/main/java/net/harunote/algorithm/sort/SelectionSort.java
 
 	public static void main(String[] args) {
+		long startTime = System.currentTimeMillis(); // 코드 시작시간 측정 (밀리초)
+		long startTimeN = System.nanoTime();		 // 코드 시작시간 측정 (나노초)
+		
 		final int[] numbers = {11, 2, 6, 3, 9, 8};
 		
 		System.out.println("Result = " + Arrays.toString(selectSort(numbers)));
+		
+		long endTime = System.currentTimeMillis(); // 코드 종료시간 측정 (밀리초)
+		long durationTimeSec = endTime - startTime;
+		long endTimeN = System.nanoTime();  		// 코드 종료시간 측정 (나노초)
+		long durationTimeSecN = endTimeN - startTimeN;
+	    
+		System.out.println(durationTimeSec + "m/s"); // 밀리세컨드 출력
+		System.out.println((durationTimeSec / 1000) + "sec"); // 초 단위 변환 출력
+		System.out.println(durationTimeSecN + "n/s"); // 나노세컨드 출력
 	}
 
 	private static int[] selectSort(int[] numbers) {

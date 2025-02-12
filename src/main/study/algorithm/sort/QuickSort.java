@@ -9,7 +9,7 @@ import java.util.Arrays;
  * O(n^2) : 이미 정렬된 상태에서 실행할 경우 space complexity : O(log n)
  */
 public class QuickSort {
-	//* https://github.com/haru-note/tech-interview/blob/main/src/main/java/net/harunote/algorithm/sort/MergeSort.java
+	//* https://github.com/haru-note/tech-interview/blob/main/src/main/java/net/harunote/algorithm/sort/QuickSort.java
 
 	public static void main(String[] args) {
 		int[] array = {9, 2, 4, 7, 3, 7, 10};
@@ -23,7 +23,7 @@ public class QuickSort {
 	private static void quickSort(int[] array, int start, int end) {
 		// low - index 시작, high - index 끝
 		if (valid(array, start, end)) {
-			// 유효성검사
+			//* 유효성검사
 			return;
 		}
 		

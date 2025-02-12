@@ -12,12 +12,24 @@ public class QuickSort {
 	//* https://github.com/haru-note/tech-interview/blob/main/src/main/java/net/harunote/algorithm/sort/QuickSort.java
 
 	public static void main(String[] args) {
+		long startTime = System.currentTimeMillis(); // 코드 시작시간 측정 (밀리초)
+		long startTimeN = System.nanoTime();		 // 코드 시작시간 측정 (나노초)
+		
 		int[] array = {9, 2, 4, 7, 3, 7, 10};
 		
 		int start = 0;
 		int end = array.length - 1;
 		quickSort(array, start, end);
 		System.out.println(Arrays.toString(array));
+		
+		long endTime = System.currentTimeMillis(); // 코드 종료시간 측정 (밀리초)
+		long durationTimeSec = endTime - startTime;
+		long endTimeN = System.nanoTime();  		// 코드 종료시간 측정 (나노초)
+		long durationTimeSecN = endTimeN - startTimeN;
+	    
+		System.out.println(durationTimeSec + "m/s"); // 밀리세컨드 출력
+		System.out.println((durationTimeSec / 1000) + "sec"); // 초 단위 변환 출력
+		System.out.println(durationTimeSecN + "n/s"); // 나노세컨드 출력
 	}
 
 	private static void quickSort(int[] array, int start, int end) {

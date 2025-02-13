@@ -3,6 +3,7 @@ package main.study.practice.sort;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.function.Supplier;
 
 public class TestVariousSort {
@@ -27,58 +28,54 @@ public class TestVariousSort {
 		
 		//* 랜덤으로 50개의 숫자 배열을 생성 (중복X)
 		//* 생성한 숫자 배열을 기본 배열으로 한다.
-//		int[] numbers = __NUMBERS__;
-//		int[] numbers1 = __NUMBERS__;
-//		int[] numbers2 = numbers1;
-//		int[] numbers3 = __NUMBERS__;
+		int[] numbers = __NUMBERS__;
+		int[] numbers1 = numbers.clone();
+		int[] numbers2 = numbers.clone();
+		int[] numbers3 = numbers.clone();
 
-		int[] numbers = {85, 93, 77, 74, 8, 21, 13, 92, 79, 16, 26, 96, 20, 51, 60, 38, 5, 47};
-		int[] numbers1 = {85, 93, 77, 74, 8, 21, 13, 92, 79, 16, 26, 96, 20, 51, 60, 38, 5, 47};
-		int[] numbers2 = {85, 93, 77, 74, 8, 21, 13, 92, 79, 16, 26, 96, 20, 51, 60, 38, 5, 47};
-		int[] numbers3 = {85, 93, 77, 74, 8, 21, 13, 92, 79, 16, 26, 96, 20, 51, 60, 38, 5, 47};
-		
+
 		//* 배열 유효성 검사
-		if (valid(numbers1)) {
+		if (valid(numbers)) {
 			return;
 		}
 		
 		//* 생성된 숫자 출력
-		System.out.println("Default Numbers : " + printArrays(numbers1));
+		System.out.println("Default Numbers 1 : " + printArrays(numbers));
 		
 		//* 측정 시작
 		long startTime = TIME_MILLIS_SUP.get();
 		//* ArraySort 구현
-//		arraySort(numbers1);									//TODO Consumer
+		arraySort(numbers1);									//TODO Consumer
+		System.out.println("Default Numbers 1 : " + printArrays(numbers1));
+		System.out.println("Default Numbers 1 : " + printArrays(numbers2));
+		System.out.println("Default Numbers 1 : " + printArrays(numbers3));
 		//* 측정 종료
 		long endTime = TIME_MILLIS_SUP.get();
 		long duration = endTime - startTime;		//TODO Function
 		resultMap.put("ArraySort", duration);
 
 		
-//		int[] numbers2 = __NUMBERS__;
+//		numbers = __NUMBERS__;
 		//* 생성된 숫자 출력
-		System.out.println("Default Numbers 2 : " + printArrays(numbers2));
-		System.out.println("Default Numbers 3 : " + printArrays(numbers1));
-		System.out.println("Default Numbers 4 : " + printArrays(numbers));
+		System.out.println("Default Numbers 2 : " + printArrays(numbers1));
 		
 		//* 측정 시작
 		startTime = TIME_MILLIS_SUP.get();
 		//TODO BubbleSort 구현
-		bubbleSort(numbers2);
+		bubbleSort(numbers1);
 		//TODO 측정 종료
 		endTime = TIME_MILLIS_SUP.get();
 		duration = endTime - startTime;
 		resultMap.put("BubbleSort", duration);
 
 
-		System.out.println("Default Numbers 5 : " + printArrays(numbers3));
-		System.out.println("Default Numbers 2 : " + printArrays(numbers2));
-		System.out.println("Default Numbers 3 : " + printArrays(numbers1));
-		System.out.println("Default Numbers 4 : " + printArrays(numbers));
+//		numbers = __NUMBERS__;
+		//* 생성된 숫자 출력
+		System.out.println("Default Numbers 3 : " + printArrays(numbers2));
 		//* 측정 시작
 		startTime = TIME_MILLIS_SUP.get();
 		//* InsertionSort 구현
-		insertionSort(numbers3);
+		insertionSort(numbers2);
 		//* 측정 종료
 		endTime = TIME_MILLIS_SUP.get();
 		duration = endTime - startTime;
@@ -194,8 +191,21 @@ public class TestVariousSort {
 	}
 
 	private static int[] createNumbers() {
-		// TODO Auto-generated method stub
-		return null;
+
+		int numberCount = 50;
+		int numberMax = 100;
+		
+		int[] resultArr = new int[numberCount];
+		Random random = new Random();
+		
+		resultArr = random.ints(1, numberMax + 1)	// 랜덤 생성할 정수의 범위
+		                .distinct()                 // 중복 제거
+		                .limit(numberCount)     	// 생성 개수
+//		                .sorted()					// 정렬
+		                .toArray();                 // 생성한 숫자를 배열로 변환
+		
+		return resultArr;
+		
 	}
 
 }

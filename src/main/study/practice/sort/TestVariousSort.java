@@ -28,64 +28,57 @@ public class TestVariousSort {
 		
 		//* 랜덤으로 50개의 숫자 배열을 생성 (중복X)
 		//* 생성한 숫자 배열을 기본 배열으로 한다.
-		int[] numbers = __NUMBERS__;
-		int[] numbers1 = numbers.clone();
-		int[] numbers2 = numbers.clone();
-		int[] numbers3 = numbers.clone();
-
+		int[] defaultNumbers = __NUMBERS__;
 
 		//* 배열 유효성 검사
-		if (valid(numbers)) {
+		if (valid(defaultNumbers)) {
 			return;
 		}
 		
 		//* 생성된 숫자 출력
+		int[] numbers = defaultNumbers.clone();
 		System.out.println("Default Numbers 1 : " + printArrays(numbers));
-		
 		//* 측정 시작
 		long startTime = TIME_MILLIS_SUP.get();
 		//* ArraySort 구현
-		arraySort(numbers1);									//TODO Consumer
-		System.out.println("Default Numbers 1 : " + printArrays(numbers1));
-		System.out.println("Default Numbers 1 : " + printArrays(numbers2));
-		System.out.println("Default Numbers 1 : " + printArrays(numbers3));
+		arraySort(numbers);									//TODO Consumer
 		//* 측정 종료
 		long endTime = TIME_MILLIS_SUP.get();
 		long duration = endTime - startTime;		//TODO Function
 		resultMap.put("ArraySort", duration);
 
 		
-//		numbers = __NUMBERS__;
 		//* 생성된 숫자 출력
-		System.out.println("Default Numbers 2 : " + printArrays(numbers1));
-		
+		numbers = defaultNumbers.clone();
+		System.out.println("Default Numbers 2 : " + printArrays(numbers));
 		//* 측정 시작
 		startTime = TIME_MILLIS_SUP.get();
-		//TODO BubbleSort 구현
-		bubbleSort(numbers1);
-		//TODO 측정 종료
+		//* BubbleSort 구현
+		bubbleSort(numbers);
+		//* 측정 종료
 		endTime = TIME_MILLIS_SUP.get();
 		duration = endTime - startTime;
 		resultMap.put("BubbleSort", duration);
 
 
-//		numbers = __NUMBERS__;
 		//* 생성된 숫자 출력
-		System.out.println("Default Numbers 3 : " + printArrays(numbers2));
+		numbers = defaultNumbers.clone();
+		System.out.println("Default Numbers 3 : " + printArrays(numbers));
 		//* 측정 시작
 		startTime = TIME_MILLIS_SUP.get();
 		//* InsertionSort 구현
-		insertionSort(numbers2);
+		insertionSort(numbers);
 		//* 측정 종료
 		endTime = TIME_MILLIS_SUP.get();
 		duration = endTime - startTime;
 		resultMap.put("InsertionSort", duration);
 
 		//* 측정 시작
+		numbers = defaultNumbers.clone();
 		startTime = TIME_MILLIS_SUP.get();
 		//TODO MergeSort 구현
-		mergeSort(numbers);
-		//TODO 측정 종료
+//		mergeSort(numbers);
+		//* 측정 종료
 		endTime = TIME_MILLIS_SUP.get();
 		duration = endTime - startTime;
 		resultMap.put("MergeSort", duration);
@@ -93,8 +86,8 @@ public class TestVariousSort {
 		//* 측정 시작
 		startTime = TIME_MILLIS_SUP.get();
 		//TODO QuickSort 구현
-		quickSort(numbers);
-		//TODO 측정 종료
+//		quickSort(numbers);
+		//* 측정 종료
 		endTime = TIME_MILLIS_SUP.get();
 		duration = endTime - startTime;
 		resultMap.put("QuickSort", duration);
@@ -102,8 +95,8 @@ public class TestVariousSort {
 		//* 측정 시작
 		startTime = TIME_MILLIS_SUP.get();
 		//TODO SelectionSort 구현
-		selectionSort(numbers);
-		//TODO 측정 종료
+//		selectionSort(numbers);
+		//* 측정 종료
 		endTime = TIME_MILLIS_SUP.get();
 		duration = endTime - startTime;
 		resultMap.put("SelectionSort", duration);
@@ -127,9 +120,57 @@ public class TestVariousSort {
 		
 	}
 
-	private static void mergeSort(int[] numbers) {
-		// TODO Auto-generated method stub
+	private static Comparable[] mergeSort(Comparable[] numbers) {
+		// 리스트를 반으로 나누어 두 부분으로 분리
+		Comparable[] first = new Comparable[numbers.length / 2];	// 5일 경우 2.5 (2)
+		Comparable[] second = new Comparable[numbers.length - first.length];	// 3(5-2)개의 배열 요소 처리
 		
+		// 배열에서 원하는 요소를 부분을 복사
+		// 원본, 원본 시작점, 복사본, 복사본 시작점, 길이
+		System.arraycopy(numbers, 0, first, 0, first.length);	// 첫번째 파트 배열 카피	list, 0, first, 0, 2 
+		System.arraycopy(numbers, first.length, second, 0, second.length);	// 두번째 파트 배열 카피	list, 2, second, 0, 3
+		
+		// 재귀 호출로 각 요소를 분리 (첫번째 배열 분해 후 두번째 배열 분해)
+		mergeSort(first);
+		mergeSort(second);
+		
+		// 각 배열을 병합하여 원래 배열에 덮어쓴다.
+		merged(first, second, numbers);
+		
+		return numbers;
+	}
+
+	private static void merged(Comparable[] first, Comparable[] second, Comparable[] result) {
+		// 첫번째 배열의 인덱스 위치 - 첫 요소부터 시작
+		int firstIndex = 0;
+		
+		// 두번째 배열의 인덱스 위치 - 첫 요소부터 시작
+		int secondIndex = 0;
+		
+		// 병합된 배의 인덱스 위치 - 첫번째 위치부터 시작
+		int merged = 0;
+		
+		// 첫번째배열의 요소와 두번째 배열의 요소를 비교
+		// 그 중 작은 요소를 배열 병합에 저장
+		while (firstIndex < first.length && secondIndex < second.length) {
+			System.out.println(
+					"first[firstIndex] : " + first[firstIndex]
+					+ ", second[secondIndex] : " + second[secondIndex]
+					+ ", result = " + first[firstIndex].compareTo(second[secondIndex])
+					);
+			
+			if (first[firstIndex].compareTo(second[secondIndex]) < 0) {
+				result[merged] = first[firstIndex];
+				firstIndex++;
+			} else {
+				result[merged] = second[secondIndex];
+				secondIndex++;
+			}
+			
+			merged++;
+		}
+		System.arraycopy(first, firstIndex, result, merged, first.length - firstIndex);
+		System.arraycopy(second, secondIndex, result, merged, second.length - secondIndex);
 	}
 
 	private static void insertionSort(int[] numbers) {
@@ -183,29 +224,6 @@ public class TestVariousSort {
 	private static void arraySort(int[] numbers) {
 		Arrays.sort(numbers);
 		System.out.println("ArraySort 결과 : " + printArrays(numbers));
-	}
-
-	private static Supplier<Integer> startTime() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private static int[] createNumbers() {
-
-		int numberCount = 50;
-		int numberMax = 100;
-		
-		int[] resultArr = new int[numberCount];
-		Random random = new Random();
-		
-		resultArr = random.ints(1, numberMax + 1)	// 랜덤 생성할 정수의 범위
-		                .distinct()                 // 중복 제거
-		                .limit(numberCount)     	// 생성 개수
-//		                .sorted()					// 정렬
-		                .toArray();                 // 생성한 숫자를 배열로 변환
-		
-		return resultArr;
-		
 	}
 
 }

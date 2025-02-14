@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class TestVariousSort {
@@ -39,11 +40,11 @@ public class TestVariousSort {
 		int[] numbers = defaultNumbers.clone();
 		System.out.println("Default Numbers 1 : " + printArrays(numbers));
 		//* 측정 시작
-		long startTime = TIME_MILLIS_SUP.get();
+		long startTime = TIME_NANO_SUP.get();
 		//* ArraySort 구현
 		arraySort(numbers);									//TODO Consumer
 		//* 측정 종료
-		long endTime = TIME_MILLIS_SUP.get();
+		long endTime = TIME_NANO_SUP.get();
 		long duration = endTime - startTime;		//TODO Function
 		resultMap.put("ArraySort", duration);
 
@@ -52,11 +53,11 @@ public class TestVariousSort {
 		numbers = defaultNumbers.clone();
 		System.out.println("Default Numbers 2 : " + printArrays(numbers));
 		//* 측정 시작
-		startTime = TIME_MILLIS_SUP.get();
+		startTime = TIME_NANO_SUP.get();
 		//* BubbleSort 구현
 		bubbleSort(numbers);
 		//* 측정 종료
-		endTime = TIME_MILLIS_SUP.get();
+		endTime = TIME_NANO_SUP.get();
 		duration = endTime - startTime;
 		resultMap.put("BubbleSort", duration);
 
@@ -65,44 +66,55 @@ public class TestVariousSort {
 		numbers = defaultNumbers.clone();
 		System.out.println("Default Numbers 3 : " + printArrays(numbers));
 		//* 측정 시작
-		startTime = TIME_MILLIS_SUP.get();
+		startTime = TIME_NANO_SUP.get();
 		//* InsertionSort 구현
 		insertionSort(numbers);
 		//* 측정 종료
-		endTime = TIME_MILLIS_SUP.get();
+		endTime = TIME_NANO_SUP.get();
 		duration = endTime - startTime;
 		resultMap.put("InsertionSort", duration);
 
 		//* 측정 시작
 		numbers = defaultNumbers.clone();
-		startTime = TIME_MILLIS_SUP.get();
-		//TODO MergeSort 구현
-//		mergeSort(numbers);
+		Integer[] numbersIntg = Arrays.stream(numbers).boxed().toArray(Integer[]::new);
+		System.out.println("Default Numbers 4 : " + Arrays.toString(numbersIntg));
+		startTime = TIME_NANO_SUP.get();
+		//* MergeSort 구현
+		mergeSort(numbersIntg);
+		System.out.println("MergerSort 결과 : " + Arrays.toString(numbersIntg));
 		//* 측정 종료
-		endTime = TIME_MILLIS_SUP.get();
+		endTime = TIME_NANO_SUP.get();
 		duration = endTime - startTime;
 		resultMap.put("MergeSort", duration);
 
+		//* 생성된 숫자 출력
+		numbers = defaultNumbers.clone();
+		System.out.println("Default Numbers 5 : " + printArrays(numbers));
 		//* 측정 시작
-		startTime = TIME_MILLIS_SUP.get();
-		//TODO QuickSort 구현
-//		quickSort(numbers);
+		startTime = TIME_NANO_SUP.get();
+		//* QuickSort 구현
+		//TODO 일부 정렬이 안됨. 확인 필요.
+//		quickSort(numbers, 0, numbers.length - 1);
+//		System.out.println("QuickSort 결과 : " + printArrays(numbers));
 		//* 측정 종료
-		endTime = TIME_MILLIS_SUP.get();
+		endTime = TIME_NANO_SUP.get();
 		duration = endTime - startTime;
 		resultMap.put("QuickSort", duration);
 
+		//* 생성된 숫자 출력
+		numbers = defaultNumbers.clone();
+		System.out.println("Default Numbers 6 : " + printArrays(numbers));
 		//* 측정 시작
-		startTime = TIME_MILLIS_SUP.get();
-		//TODO SelectionSort 구현
-//		selectionSort(numbers);
+		startTime = TIME_NANO_SUP.get();
+		//* SelectionSort 구현
+		selectionSort(numbers);
 		//* 측정 종료
-		endTime = TIME_MILLIS_SUP.get();
+		endTime = TIME_NANO_SUP.get();
 		duration = endTime - startTime;
 		resultMap.put("SelectionSort", duration);
 		
 		//TODO 측정 결과에 따라 실행속도가 빠른 정렬부터 나열하여 출력
-//		result(resultMap);					//TODO Consumer
+		result(resultMap);					//TODO Consumer
 		
 	}
 
@@ -111,16 +123,79 @@ public class TestVariousSort {
 	}
 
 	private static void selectionSort(int[] numbers) {
-		// TODO Auto-generated method stub
+
+		// 전체 요소 순회. 마지막 공간은 자동으로 위치 교환을 통해 정렬
+		for (int index = 0; index < numbers.length - 1; index++) {
+			int min = index;
+			
+			// 다음 요소를 현재 요소와 비교. 다음 요소가 현재의 요소보다 작을 경우 요소의 index를 바꾼다.
+			for (int scan = index + 1; scan < numbers.length; scan++) {
+				if (numbers[scan] < numbers[min]) {
+					min =  scan;						// 최소값의 index
+				}
+			}
+			int smaller = numbers[min];		// 최소값
+			numbers[min] = numbers[index];
+			numbers[index] = smaller;
+		}
+		System.out.println("SelectionSort 결과 : " + printArrays(numbers));
 		
 	}
 
-	private static void quickSort(int[] numbers) {
-		// TODO Auto-generated method stub
+	private static void quickSort(int[] numbers, int start, int end) {
+
+		if (valid(numbers, start, end)) {
+			//* 유효성검사
+			return;
+		}
 		
+		// 피봇지정
+		int middle = start + (end - start) / 2;
+		int pivot = numbers[middle];
+		
+		int low = start;
+		int high = end;
+		
+		while (low <= high) {
+			while (numbers[low] < pivot) {
+				low++;
+			}
+			while (numbers[high] > pivot) {
+				high--;
+			}
+			if (low <= high) {
+				int temp = numbers[low];
+				numbers[low] = numbers[high];
+				numbers[high] = temp;
+				low++;
+				high++;
+			}
+		}
+		if (start < high) {
+			quickSort(numbers, start, high);
+		}
+		if (start > low) {
+			quickSort(numbers, low, end);
+		}
+
+	}
+
+	private static boolean valid(int[] array, int low, int high) {
+		if (array.length == 0 || array == null) {
+			return true;
+		}
+		if (low >= high) {
+			return true;
+		}
+		return false;
 	}
 
 	private static Comparable[] mergeSort(Comparable[] numbers) {
+		// 리스트가 1 이하이면 연산한 필요 없음
+		if (numbers.length <= 1) {
+			return numbers;
+		}
+		
 		// 리스트를 반으로 나누어 두 부분으로 분리
 		Comparable[] first = new Comparable[numbers.length / 2];	// 5일 경우 2.5 (2)
 		Comparable[] second = new Comparable[numbers.length - first.length];	// 3(5-2)개의 배열 요소 처리
@@ -153,11 +228,11 @@ public class TestVariousSort {
 		// 첫번째배열의 요소와 두번째 배열의 요소를 비교
 		// 그 중 작은 요소를 배열 병합에 저장
 		while (firstIndex < first.length && secondIndex < second.length) {
-			System.out.println(
-					"first[firstIndex] : " + first[firstIndex]
-					+ ", second[secondIndex] : " + second[secondIndex]
-					+ ", result = " + first[firstIndex].compareTo(second[secondIndex])
-					);
+//			System.out.println(
+//					"first[firstIndex] : " + first[firstIndex]
+//					+ ", second[secondIndex] : " + second[secondIndex]
+//					+ ", result = " + first[firstIndex].compareTo(second[secondIndex])
+//					);
 			
 			if (first[firstIndex].compareTo(second[secondIndex]) < 0) {
 				result[merged] = first[firstIndex];
@@ -188,9 +263,13 @@ public class TestVariousSort {
 		System.out.println("InsertionSort 결과 : " + printArrays(numbers));
 	}
 
-	private static void result(Map<String, Integer> resultMap) {
-		// TODO Auto-generated method stub
-		
+	private static void result(Map<String, Long> resultMap) {
+		// 맵 엔트리의 콜렉션 집합
+//		Set<?> set = resultMap.entrySet();
+		for (Map.Entry<String, Long> entry : resultMap.entrySet()) {
+		    System.out.print(entry.getKey() + " : ");
+		    System.out.println(entry.getValue());
+		}
 	}
 
 	private static boolean valid(int[] numbers) {

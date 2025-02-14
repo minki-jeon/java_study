@@ -2,10 +2,12 @@ package main.study.practice.sort;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class TestVariousSort {
 	/**
@@ -88,18 +90,18 @@ public class TestVariousSort {
 		resultMap.put("MergeSort", duration);
 
 		//* 생성된 숫자 출력
-		numbers = defaultNumbers.clone();
-		System.out.println("Default Numbers 5 : " + printArrays(numbers));
+//		numbers = defaultNumbers.clone();
+//		System.out.println("Default Numbers 5 : " + printArrays(numbers));
 		//* 측정 시작
-		startTime = TIME_NANO_SUP.get();
+//		startTime = TIME_NANO_SUP.get();
 		//* QuickSort 구현
 		//TODO 일부 정렬이 안됨. 확인 필요.
 //		quickSort(numbers, 0, numbers.length - 1);
 //		System.out.println("QuickSort 결과 : " + printArrays(numbers));
 		//* 측정 종료
-		endTime = TIME_NANO_SUP.get();
-		duration = endTime - startTime;
-		resultMap.put("QuickSort", duration);
+//		endTime = TIME_NANO_SUP.get();
+//		duration = endTime - startTime;
+//		resultMap.put("QuickSort", duration);
 
 		//* 생성된 숫자 출력
 		numbers = defaultNumbers.clone();
@@ -264,9 +266,21 @@ public class TestVariousSort {
 	}
 
 	private static void result(Map<String, Long> resultMap) {
-		// 맵 엔트리의 콜렉션 집합
-//		Set<?> set = resultMap.entrySet();
-		for (Map.Entry<String, Long> entry : resultMap.entrySet()) {
+//		for (Map.Entry<String, Long> entry : resultMap.entrySet()) {
+//		    System.out.print(entry.getKey() + " : ");
+//		    System.out.println(entry.getValue());
+//		}
+		Map<String, Long> resultSortMap = resultMap.entrySet()
+								  .stream()
+								  .sorted(Map.Entry.comparingByValue())
+								  .collect(Collectors.toMap(
+										    Map.Entry::getKey, 
+										    Map.Entry::getValue, 
+													    (a, b) -> { throw new AssertionError(); },
+													                LinkedHashMap<String, Long>::new
+								  ));
+		System.out.println("============== Result Sort ===========");
+		for (Map.Entry<String, Long> entry : resultSortMap.entrySet()) {
 		    System.out.print(entry.getKey() + " : ");
 		    System.out.println(entry.getValue());
 		}

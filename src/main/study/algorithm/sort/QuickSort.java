@@ -18,6 +18,7 @@ public class QuickSort {
 //		int[] array = {9, 2, 4, 7, 3, 7, 10};
 		int[] array = {28, 97, 8, 78, 49, 47, 2, 62, 99, 75, 54, 56, 10, 31, 4, 74, 35, 9, 81, 79, 87, 34, 27, 38, 13, 24, 53, 100, 73, 77, 42, 90, 23, 80, 63, 21, 25, 96, 50, 43, 69, 83, 94, 88, 92, 44, 72, 89, 58, 55};
 		//* 위의 배결은 정렬되지 않음. TODO 로직 확인 필요
+		//* Result = [2, 4, 8, 9, 10, 13, 47, 62, 99, 75, 54, 56, 49, 31, 78, 74, 35, 97, 81, 79, 87, 34, 27, 38, 28, 24, 53, 100, 73, 77, 42, 90, 23, 80, 63, 21, 25, 96, 50, 43, 69, 83, 94, 88, 92, 44, 72, 89, 58, 55]
 		
 		int start = 0;
 		int end = array.length - 1;
@@ -60,13 +61,15 @@ public class QuickSort {
 				array[low] = array[high];
 				array[high] = temp;
 				low++;
-				high++;
+				high--;								//* ArrayIndexOutOfBoundsException 오류 : 기존 'high++'에서 수정
 			}
 		}
 		if (start < high) {
+			//* 피봇기준 왼쪽 배열 정렬
 			quickSort(array, start, high);
 		}
-		if (start > low) {
+		if (end > low) {							//* 정상적으로 정렬되지 않는 오류 : 기존 'start > low'에서 수정
+			//* 피봇기준 오른쪽 배열 정렬
 			quickSort(array, low, end);
 		}
 	}

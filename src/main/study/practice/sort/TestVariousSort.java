@@ -2,6 +2,7 @@ package main.study.practice.sort;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
@@ -83,7 +84,7 @@ public class TestVariousSort {
 		startTime = TIME_NANO_SUP.get();
 		//* MergeSort 구현
 		mergeSort(numbersIntg);
-		System.out.println("MergerSort 결과 : " + Arrays.toString(numbersIntg));
+		System.out.println("MergerSort 결과 :    " + Arrays.toString(numbersIntg));
 		//* 측정 종료
 		endTime = TIME_NANO_SUP.get();
 		duration = endTime - startTime;
@@ -96,7 +97,7 @@ public class TestVariousSort {
 		startTime = TIME_NANO_SUP.get();
 		//* QuickSort 구현
 		quickSort(numbers, 0, numbers.length - 1);
-		System.out.println("QuickSort 결과 : " + printArrays(numbers));
+		System.out.println("QuickSort 결과     : " + printArrays(numbers));
 		//* 측정 종료
 		endTime = TIME_NANO_SUP.get();
 		duration = endTime - startTime;
@@ -283,6 +284,13 @@ public class TestVariousSort {
 		    System.out.print(entry.getKey() + " : ");
 		    System.out.println(entry.getValue());
 		}
+		System.out.println("========== Sort 소요 시간 정렬 ===========");
+		Iterator<String> keys = resultSortMap.keySet().iterator();
+		while (keys.hasNext()) {
+			System.out.print(keys.next());
+			if (keys.hasNext()) System.out.print(" < ");
+		}
+		
 	}
 
 	private static boolean valid(int[] numbers) {
@@ -304,7 +312,7 @@ public class TestVariousSort {
 			}
 		} while (switched);	// 모든 원소를 비교한 경우 반복 탈출 
 		
-		System.out.println("BubbleSort 결과 : " + printArrays(numbers));
+		System.out.println("BubbleSort 결과 :    " + printArrays(numbers));
 		
 	}
 
@@ -315,7 +323,30 @@ public class TestVariousSort {
 
 	private static void arraySort(int[] numbers) {
 		Arrays.sort(numbers);
-		System.out.println("ArraySort 결과 : " + printArrays(numbers));
+		System.out.println("ArraySort 결과 :     " + printArrays(numbers));
 	}
 
 }
+
+
+/**
+ * ******* RESULTS ***************
+ * MergeSort(121500) < InsertionSort < QuickSort < SelectionSort < BubbleSort < ArraySort
+ * InsertionSort(81800) < QuickSort < SelectionSort < MergeSort < BubbleSort < ArraySort
+ * SelectionSort(106900) < MergeSort < QuickSort < BubbleSort < InsertionSort < ArraySort
+ * QuickSort(83000) < InsertionSort < SelectionSort < MergeSort < BubbleSort < ArraySort
+ * InsertionSort(81800) < BubbleSort < SelectionSort < QuickSort < MergeSort < ArraySort
+ * SelectionSort(86900) < QuickSort < InsertionSort < MergeSort < BubbleSort < ArraySort(782800)
+ * QuickSort(81500) < SelectionSort < MergeSort < BubbleSort < InsertionSort < ArraySort(585700)
+ * QuickSort(86000) < SelectionSort < InsertionSort < MergeSort < BubbleSort < ArraySort(624600)
+ * InsertionSort(114100) < SelectionSort < QuickSort < MergeSort < BubbleSort < ArraySort(848200)
+ * SelectionSort(125900) < QuickSort < InsertionSort < MergeSort < BubbleSort < ArraySort(781900)
+ * InsertionSort(82400) < QuickSort < SelectionSort < MergeSort < BubbleSort < ArraySort(640200)
+ * QuickSort(84000) < SelectionSort < MergeSort < BubbleSort < InsertionSort < ArraySort(600200)
+ * QuickSort(119900) < SelectionSort < InsertionSort < MergeSort < BubbleSort < ArraySort(827500)
+ * SelectionSort(101300) < MergeSort < BubbleSort < QuickSort < InsertionSort < ArraySort(615500)
+ * MergeSort(134900) < InsertionSort < SelectionSort < QuickSort < BubbleSort < ArraySort(712500)
+ * 
+ */
+
+

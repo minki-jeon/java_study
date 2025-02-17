@@ -15,7 +15,9 @@ public class QuickSort {
 		long startTime = System.currentTimeMillis(); // 코드 시작시간 측정 (밀리초)
 		long startTimeN = System.nanoTime();		 // 코드 시작시간 측정 (나노초)
 		
-		int[] array = {9, 2, 4, 7, 3, 7, 10};
+//		int[] array = {9, 2, 4, 7, 3, 7, 10};
+		int[] array = {28, 97, 8, 78, 49, 47, 2, 62, 99, 75, 54, 56, 10, 31, 4, 74, 35, 9, 81, 79, 87, 34, 27, 38, 13, 24, 53, 100, 73, 77, 42, 90, 23, 80, 63, 21, 25, 96, 50, 43, 69, 83, 94, 88, 92, 44, 72, 89, 58, 55};
+		//* 위의 배결은 정렬되지 않음. TODO 로직 확인 필요
 		
 		int start = 0;
 		int end = array.length - 1;

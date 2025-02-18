@@ -123,28 +123,30 @@ public class TestVariousSort {
 		
 		//* 생성된 숫자 출력
 		numbers = defaultNumbers.clone();
+//		int[] numbersT = {32, 50, 72, 37, 79, 36, 75, 47, 43, 57, 67, 68, 51, 30, 7, 4};
 		System.out.println("Default Numbers 7 : " + printArrays(numbers));
 		//* 측정 시작
 		startTime = TIME_NANO_SUP.get();
-		//* SelectionSort 구현
-		heapSort(numbers);
+		//* heapSort 구현
+		boolean orderDirect = true; 		//* true: asc(오름차순), false: desc(내림차순)
+		heapSort(orderDirect, numbers);
 		//* 측정 종료
 		endTime = TIME_NANO_SUP.get();
 		duration = endTime - startTime;
 		resultMap.put("HeapSort", duration);
 		
 		
-		//* 생성된 숫자 출력
-		numbers = defaultNumbers.clone();
-		System.out.println("Default Numbers 7 : " + printArrays(numbers));
-		//* 측정 시작
-		startTime = TIME_NANO_SUP.get();
-		//* SelectionSort 구현
-		ShellSort(numbers);
-		//* 측정 종료
-		endTime = TIME_NANO_SUP.get();
-		duration = endTime - startTime;
-		resultMap.put("HeapSort", duration);
+//		//* 생성된 숫자 출력
+//		numbers = defaultNumbers.clone();
+//		System.out.println("Default Numbers 8 : " + printArrays(numbers));
+//		//* 측정 시작
+//		startTime = TIME_NANO_SUP.get();
+//		//* ShellSort 구현
+//		ShellSort(numbers);
+//		//* 측정 종료
+//		endTime = TIME_NANO_SUP.get();
+//		duration = endTime - startTime;
+//		resultMap.put("ShellSort", duration);
 		
 		
 		//* 측정 결과에 따라 실행속도가 빠른 정렬부터 나열하여 출력
@@ -152,13 +154,79 @@ public class TestVariousSort {
 		
 	}
 
+	private static void swap(int[] numbers, int idx1, int idx2) {
+		int temp = numbers[idx1];
+		numbers[idx1] = numbers[idx2];
+		numbers[idx2] = temp;		
+	}
+
 	private static void ShellSort(int[] numbers) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	private static void heapSort(int[] numbers) {
-		// TODO Auto-generated method stub
+	private static void heapSort(boolean order, int[] numbers) {
+		int len = numbers.length;
+		
+		for (int i = len / 2 - 1; i >= 0; i--) {
+			heapify(order, numbers, len, i);
+		}
+		for (int i = len - 1; i > 0; i--) {
+			swap(numbers, 0, i);
+			heapify(order, numbers, i, 0);
+		}
+
+		System.out.println("HeapSort 결과 : " + printArrays(numbers));
+	}
+
+	private static void heapify(boolean order, int[] numbers, int lastIdx, int parent) {
+		int upper = parent;		// 부모노드 인덱스
+		int left = parent * 2 + 1;	// 자식노드(왼쪽) 인덱스
+		int right = parent * 2 + 2;	// 자식노드(오른쪽) 인덱스
+		
+		if (order) {
+			if (left < lastIdx && numbers[left] > numbers[upper]) {
+				//* 부모노드와 자식노드(왼쪽) swap set
+				upper = left;
+			}
+			if (right < lastIdx && numbers[right] > numbers[upper]) {
+				//* 부모노드와 자식노드(오른쪽) swap set
+				upper = right;
+			}
+		} else {
+			if (left < lastIdx && numbers[left] < numbers[upper]) {
+				//* 부모노드와 자식노드(왼쪽) swap set
+				upper = left;
+			}
+			if (right < lastIdx && numbers[right] < numbers[upper]) {
+				//* 부모노드와 자식노드(오른쪽) swap set
+				upper = right;
+			}
+		}
+		if (upper != parent) {
+			//* swap set 되었을 때
+			swap(numbers, parent, upper);
+			heapify(order, numbers, lastIdx, upper);		//* loop
+		}
+		
+//		while (left < lastIdx) {
+//			if (numbers[left] > numbers[largest]) {
+//				//* 부모노드와 자식노드(왼쪽) swap set
+//				largest = left;
+//			}
+//			if (right < lastIdx && numbers[right] > numbers[largest]) {
+//				//* 부모노드와 자식노드(오른쪽) swap set
+//				largest = right;
+//			}
+//			if (largest != parent) {
+//				//* swap set 되었을 때
+//				swap(numbers, parent, lastIdx);
+////				heapify(numbers, lastIdx, largest);		//* loop
+//				parent = largest;
+//			} else {
+//				break;
+//			}
+//		}
 		
 	}
 
@@ -208,9 +276,7 @@ public class TestVariousSort {
 				high--;
 			}
 			if (low <= high) {
-				int temp = numbers[low];
-				numbers[low] = numbers[high];
-				numbers[high] = temp;
+				swap(numbers, low, high);
 				low++;
 				high--;
 			}
@@ -346,9 +412,10 @@ public class TestVariousSort {
 			for (int i = 0; i < numbers.length - 1; i++) {
 				// 첫번째 원소와 현재 원소를 비교하여 현재 원소보다 작으면 swap
 				if (numbers[i + 1] < numbers[i]) {	// 뒤에 값이 현재 값보다 작은 경우 swap
-					int temp = numbers[i + 1];		// 기준값을 위한 임시 공간 생성
-					numbers[i + 1] = numbers[i];
-					numbers[i] = temp;
+					swap(numbers, i + 1, i);
+//					int temp = numbers[i + 1];		// 기준값을 위한 임시 공간 생성
+//					numbers[i + 1] = numbers[i];
+//					numbers[i] = temp;
 					switched = true;
 				}
 			}

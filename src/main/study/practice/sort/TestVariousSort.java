@@ -16,6 +16,7 @@ public class TestVariousSort {
 	 * reference: https://github.com/haru-note/tech-interview/blob/main/src/main/java/net/harunote/algorithm/sort/
 	 * sort: ArraySort, BubbleSort, InsertionSort, MergeSort, QuickSort, SelectionSort
 	 * Description: 구현한 각각의 정렬 알고리즘들을 실행시간 측정하여 가장 빠른 정렬부터 느린 정렬까지 나열
+	 * Add : HeapSort, ShellSort
 	 */
 
 	/** 랜덤한 숫자 배열 생성 **/
@@ -77,10 +78,12 @@ public class TestVariousSort {
 		duration = endTime - startTime;
 		resultMap.put("InsertionSort", duration);
 
-		//* 측정 시작
+
+		//* 생성된 숫자 출력
 		numbers = defaultNumbers.clone();
 		Integer[] numbersIntg = Arrays.stream(numbers).boxed().toArray(Integer[]::new);
 		System.out.println("Default Numbers 4 : " + Arrays.toString(numbersIntg));
+		//* 측정 시작
 		startTime = TIME_NANO_SUP.get();
 		//* MergeSort 구현
 		mergeSort(numbersIntg);
@@ -90,6 +93,7 @@ public class TestVariousSort {
 		duration = endTime - startTime;
 		resultMap.put("MergeSort", duration);
 
+		
 		//* 생성된 숫자 출력
 		numbers = defaultNumbers.clone();
 		System.out.println("Default Numbers 5 : " + printArrays(numbers));
@@ -103,6 +107,7 @@ public class TestVariousSort {
 		duration = endTime - startTime;
 		resultMap.put("QuickSort", duration);
 
+		
 		//* 생성된 숫자 출력
 		numbers = defaultNumbers.clone();
 		System.out.println("Default Numbers 6 : " + printArrays(numbers));
@@ -115,8 +120,45 @@ public class TestVariousSort {
 		duration = endTime - startTime;
 		resultMap.put("SelectionSort", duration);
 		
-		//TODO 측정 결과에 따라 실행속도가 빠른 정렬부터 나열하여 출력
+		
+		//* 생성된 숫자 출력
+		numbers = defaultNumbers.clone();
+		System.out.println("Default Numbers 7 : " + printArrays(numbers));
+		//* 측정 시작
+		startTime = TIME_NANO_SUP.get();
+		//* SelectionSort 구현
+		heapSort(numbers);
+		//* 측정 종료
+		endTime = TIME_NANO_SUP.get();
+		duration = endTime - startTime;
+		resultMap.put("HeapSort", duration);
+		
+		
+		//* 생성된 숫자 출력
+		numbers = defaultNumbers.clone();
+		System.out.println("Default Numbers 7 : " + printArrays(numbers));
+		//* 측정 시작
+		startTime = TIME_NANO_SUP.get();
+		//* SelectionSort 구현
+		ShellSort(numbers);
+		//* 측정 종료
+		endTime = TIME_NANO_SUP.get();
+		duration = endTime - startTime;
+		resultMap.put("HeapSort", duration);
+		
+		
+		//* 측정 결과에 따라 실행속도가 빠른 정렬부터 나열하여 출력
 		result(resultMap);					//TODO Consumer
+		
+	}
+
+	private static void ShellSort(int[] numbers) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void heapSort(int[] numbers) {
+		// TODO Auto-generated method stub
 		
 	}
 

@@ -123,7 +123,6 @@ public class TestVariousSort {
 		
 		//* 생성된 숫자 출력
 		numbers = defaultNumbers.clone();
-//		int[] numbersT = {32, 50, 72, 37, 79, 36, 75, 47, 43, 57, 67, 68, 51, 30, 7, 4};
 		System.out.println("Default Numbers 7 : " + printArrays(numbers));
 		//* 측정 시작
 		startTime = TIME_NANO_SUP.get();
@@ -136,17 +135,17 @@ public class TestVariousSort {
 		resultMap.put("HeapSort", duration);
 		
 		
-//		//* 생성된 숫자 출력
-//		numbers = defaultNumbers.clone();
-//		System.out.println("Default Numbers 8 : " + printArrays(numbers));
-//		//* 측정 시작
-//		startTime = TIME_NANO_SUP.get();
-//		//* ShellSort 구현
-//		ShellSort(numbers);
-//		//* 측정 종료
-//		endTime = TIME_NANO_SUP.get();
-//		duration = endTime - startTime;
-//		resultMap.put("ShellSort", duration);
+		//* 생성된 숫자 출력
+		numbers = defaultNumbers.clone();
+		System.out.println("Default Numbers 8 : " + printArrays(numbers));
+		//* 측정 시작
+		startTime = TIME_NANO_SUP.get();
+		//* ShellSort 구현
+		shellSort(numbers);
+		//* 측정 종료
+		endTime = TIME_NANO_SUP.get();
+		duration = endTime - startTime;
+		resultMap.put("ShellSort", duration);
 		
 		
 		//* 측정 결과에 따라 실행속도가 빠른 정렬부터 나열하여 출력
@@ -160,9 +159,22 @@ public class TestVariousSort {
 		numbers[idx2] = temp;		
 	}
 
-	private static void ShellSort(int[] numbers) {
-		// TODO Auto-generated method stub
+	private static void shellSort(int[] numbers) {
+		int len = numbers.length;
 		
+		for (int gap = len / 2; gap > 0; gap /= 2) {
+	        for (int idx1 = gap; idx1 < numbers.length; idx1++) {
+	            int tmp = numbers[idx1];
+	            int idx2 = idx1 - gap;
+	            while (idx2 >= 0 && numbers[idx2] > tmp) {
+	                numbers[idx2 + gap] = numbers[idx2];
+	                idx2 -= gap;
+	            }
+	            numbers[idx2 + gap] = tmp;
+	        }
+	    }
+
+		System.out.println("ShellSort 결과 : " + printArrays(numbers));
 	}
 
 	private static void heapSort(boolean order, int[] numbers) {
@@ -208,25 +220,6 @@ public class TestVariousSort {
 			swap(numbers, parent, upper);
 			heapify(order, numbers, lastIdx, upper);		//* loop
 		}
-		
-//		while (left < lastIdx) {
-//			if (numbers[left] > numbers[largest]) {
-//				//* 부모노드와 자식노드(왼쪽) swap set
-//				largest = left;
-//			}
-//			if (right < lastIdx && numbers[right] > numbers[largest]) {
-//				//* 부모노드와 자식노드(오른쪽) swap set
-//				largest = right;
-//			}
-//			if (largest != parent) {
-//				//* swap set 되었을 때
-//				swap(numbers, parent, lastIdx);
-////				heapify(numbers, lastIdx, largest);		//* loop
-//				parent = largest;
-//			} else {
-//				break;
-//			}
-//		}
 		
 	}
 

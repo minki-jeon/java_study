@@ -23,8 +23,10 @@ public class BinaryCadinality {
 		Map<Integer, Integer> unsortMap = new HashMap<>();
 		int size = nums.length;
 		int[] arrays = new int[size];
+		Map<Integer, String> binaryNumsMap = new HashMap<>();
 		for (int i = 0; i < size; i++) {
 			String binaryString = Integer.toBinaryString(nums[i]);		//* Integer -> 2진수 문자열 변환
+			binaryNumsMap.put(nums[i], binaryString);					//* 2진수 문자열 Map에 저장
 			char[] chars = binaryString.toCharArray();					//* 2진수 문자열 -> char형 배열 변환
 			
 			int count = 0;
@@ -35,19 +37,24 @@ public class BinaryCadinality {
 			}
 			unsortMap.put(nums[i], count);
 		}
-		
 		//* 위의 작업 과정을 거친 값들을 Map에 정렬시켜 저장한다.
+		Map<Integer, String> binaryMap = new LinkedHashMap<>();
 		Map<Integer, Integer> valueMap = new LinkedHashMap<>();
 		Map<Integer, Integer> keyMap = new LinkedHashMap<>();
-		//* 10진수 정렬
+		//* key(10진수) 정렬
+		binaryNumsMap.entrySet().stream()
+							.sorted(Map.Entry.<Integer, String>comparingByKey())
+							.forEachOrdered(x -> binaryMap.put(x.getKey(), x.getValue()));
+		//* key(10진수) 정렬
 		unsortMap.entrySet().stream()
 							.sorted(Map.Entry.<Integer, Integer>comparingByKey())
 							.forEachOrdered(x -> valueMap.put(x.getKey(), x.getValue()));
-		//* 이진수 변환값에서 1의 개수에 따른 정렬
+		//* value(이진수 변환값에서 1의 개수)에 따른 정렬
 		valueMap.entrySet().stream()
 							.sorted(Map.Entry.<Integer, Integer>comparingByValue())
 							.forEachOrdered(x -> keyMap.put(x.getKey(), x.getValue()));
 		
+		System.out.println("binaryMap : " + binaryMap);
 		System.out.println("valueMap : " + valueMap);
 		System.out.println("keyMap : " + keyMap);
 		

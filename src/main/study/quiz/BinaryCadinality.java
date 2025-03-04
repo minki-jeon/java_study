@@ -1,5 +1,6 @@
 package main.study.quiz;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -11,6 +12,9 @@ public class BinaryCadinality {
 	public static void main(String[] args) {
 		int[] numbers = {11, 12, 13, 14, 15, 16, 17};
 		int[] result = cardinalitySort(numbers);
+		
+		System.out.println("결과 = ");
+		System.out.println(Arrays.toString(result));
 	}
 
 	static int[] cardinalitySort(int[] nums) {

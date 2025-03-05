@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class BirthdayCakeCandle {
+	//* https://github.com/haru-note/tech-interview/blob/main/src/main/java/net/harunote/quiz/BirthdayCakeCandle.java
 
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);

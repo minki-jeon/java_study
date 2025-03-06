@@ -163,9 +163,10 @@ public class TestVariousSort {
 		int len = numbers.length;
 		
 		for (int gap = len / 2; gap > 0; gap /= 2) {
-	        for (int idx1 = gap; idx1 < numbers.length; idx1++) {
+	        for (int idx1 = gap; idx1 < len; idx1++) {
 	            int tmp = numbers[idx1];
 	            int idx2 = idx1 - gap;
+	            
 	            while (idx2 >= 0 && numbers[idx2] > tmp) {
 	                numbers[idx2 + gap] = numbers[idx2];
 	                idx2 -= gap;

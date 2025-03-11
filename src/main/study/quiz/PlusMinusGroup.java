@@ -14,7 +14,7 @@ public class PlusMinusGroup {
 //        System.out.println("양수 : " + result[0] + ", 0 : " + result[1] + ", 음수: " + result[2]);
         System.out.printf("양수 : %6f, 0: %6f 음수 : %6f\n", result[0], result[1], result[2]);
         
-        // referance
+        // ## Reference #############################################
         float[] items = itemCount(numbers);
         System.out.printf("positive : %.6f\n", items[0]);
         System.out.printf("negative : %.6f\n", items[1]);

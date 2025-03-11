@@ -12,6 +12,7 @@ public class TimeDiffCalculator {
 	 * - 24시간 내에 작성되었다면 xx시간 전으로 표기
 	 * - 24시간 이후라면 xx일 전으로 표기(월은 고려하지 않음)
 	 */
+	//* https://github.com/haru-note/tech-interview/blob/main/src/main/java/net/harunote/quiz/TimeDiffCalculator.java
 	
 	public static void main(String[] args) {
 		//* input
@@ -29,6 +30,9 @@ public class TimeDiffCalculator {
 		//* 현재 시간과 비교하기
 		String result = calDateTime(inputDateTime, currentDateTime);
 		System.out.println(result);
+		
+		// ## Reference ########################################
+		calculateDateTimeDiff(inputDateTime, currentDateTime);
 	}
 
 	private static String calDateTime(LocalDateTime inputDateTime, LocalDateTime currentDateTime) {
@@ -51,6 +55,31 @@ public class TimeDiffCalculator {
 		}
 
 		return calDays + "일 전";
+	}
+
+
+	private static void calculateDateTimeDiff(LocalDateTime inputDateTime, LocalDateTime currentDateTime) {
+		long minutesDifference = getTimeDiff(inputDateTime, currentDateTime, ChronoUnit.MINUTES);
+		long hoursDifference = getTimeDiff(inputDateTime, currentDateTime, ChronoUnit.HOURS);
+		long daysDifference = getTimeDiff(inputDateTime, currentDateTime, ChronoUnit.DAYS);
+		
+		printTimeDiff(minutesDifference, hoursDifference, daysDifference);
+	}
+
+
+	private static long getTimeDiff(LocalDateTime inputDateTime, LocalDateTime currentDateTime, ChronoUnit unit) {
+		return unit.between(inputDateTime, currentDateTime);
+	}
+	private static void printTimeDiff(long minutesDifference, long hoursDifference, long daysDifference) {
+		if (minutesDifference < 1) {
+			System.out.println("1분 전");
+		} else if (minutesDifference < 60) {
+			System.out.println(minutesDifference + "분 전");
+		} else if (hoursDifference < 24) {
+			System.out.println(hoursDifference + "시간 전");
+		} else {
+			System.out.println(daysDifference + "일 전");
+		}
 	}
 
 }

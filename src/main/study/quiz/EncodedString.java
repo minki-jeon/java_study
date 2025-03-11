@@ -3,7 +3,7 @@ package main.study.quiz;
 import java.util.Arrays;
 
 public class EncodedString {
-	//* https://github.com/haru-note/tech-interview/blob/main/src/main/java/net/harunote/quiz/Bracket.java
+	//* https://github.com/haru-note/tech-interview/blob/main/src/main/java/net/harunote/quiz/EncodedString.java
 	//* 1부터 26까지 숫자를 나타내는 (인코딩된) 문자열에서 (디코딩하여) 각 숫자 개수를 반환
 	//* 한자리 숫자는 별도 기호 사용하지 않음
 	//* 두자리 숫자는 #을 숫자 뒤에 덧붙인다.
